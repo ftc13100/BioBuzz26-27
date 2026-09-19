@@ -1,13 +1,13 @@
 package org.firstinspires.ftc.teamcode.core
 
 enum class RobotHardware(val deviceName: String) {
-    M_WHEEL_FR("motor0"),
-    M_WHEEL_BR("motor1"),
-    M_WHEEL_FL("motor2"),
-    M_WHEEL_BL("motor3"),
+    M_WHEEL_FR("frontRight"),
+    M_WHEEL_BR("backRight"),
+    M_WHEEL_FL("frontLeft"),
+    M_WHEEL_BL("backLeft"),
     M_SHOOTER("motor5"),
     M_SPINDEXER("motor6"),
-    M_INTAKE("motor7"),
+    M_INTAKE("intake"),
 
     S_TURRET1("servo1"),
     S_TURRET2("servo2"),
