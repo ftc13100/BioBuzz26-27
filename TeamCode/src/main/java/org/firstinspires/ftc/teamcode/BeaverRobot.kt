@@ -1,32 +1,27 @@
 package org.firstinspires.ftc.teamcode
 
-import com.pedropathing.ivy.Command
-import com.pedropathing.ivy.commands.Commands
-import com.pedropathing.ivy.groups.Groups
-import com.qualcomm.robotcore.hardware.Gamepad
-import dev.nextftc.robot.Mechanism
+import com.pedropathing.follower.Follower
+import dev.nextftc.hardware.RobotController
 import dev.nextftc.robot.NextRobot
-import dev.nextftc.robot.drive.mecanumDrive
-import org.firstinspires.ftc.teamcode.mechanisms.Drivetrain
 import org.firstinspires.ftc.teamcode.mechanisms.Intake
-import java.util.Set
-
+import org.firstinspires.ftc.teamcode.pedro.Constants
 
 class BeaverRobot : NextRobot {
+    private var _follower: Follower? = null
+    
+    val follower: Follower
+        get() {
+            if (_follower == null) {
+                _follower = Constants.create(RobotController.hardwareMap)
+            }
+            return _follower!!
+        }
 
-    private val intake = Intake()
-    private val drivetrain = Drivetrain()
+    val intake = Intake()
+    
+    override val mechanisms = setOf(intake)
 
-    fun startDrive(gamepad1: Gamepad) {
-        mecanumDrive(
-            drivetrain.frontLeft,
-            drivetrain.frontRight,
-            drivetrain.backLeft,
-            drivetrain.backRight,
-            gamepad1
-        ).schedule()
+    fun updateFollower() {
+        follower.update()
     }
-
-    override val mechanisms = setOf(drivetrain, intake)
-
 }
