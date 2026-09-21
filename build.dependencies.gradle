@@ -26,6 +26,8 @@ dependencies {
     implementation 'dev.nextftc.v2:hardware:0.2.1'
     implementation 'dev.nextftc.v2:robot:0.2.1'
 
+    implementation "dev.frozenmilk.sinister:Sloth:0.3.2"
+
     implementation 'dev.ftcautotune.FtcAutoTune:pidautotuner-core:v1.4.3'
     implementation 'dev.ftcautotune.FtcAutoTune:pidautotuner-ftc:v1.4.3'
 
