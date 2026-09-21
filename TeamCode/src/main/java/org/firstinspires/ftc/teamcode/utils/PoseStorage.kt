@@ -1,13 +1,15 @@
 package org.firstinspires.ftc.teamcode.utils
 
 import com.pedropathing.math.Pose
+import org.firstinspires.ftc.teamcode.core.Dimensions
 
 
 object PoseStorage {
     var blueAlliance = false
     var redAlliance = false
     var motif = 0
-    var autonomousEndPose: Pose = Pose(0.0, 0.0, 0.0)
+    var resetPose = Pose(Dimensions.robotWidthCenter, Dimensions.robotLengthIntake, 180.0)
+    var autonomousEndPose: Pose = resetPose
 
     /**
      * Mirrors a pose because Pedro 3 removed it

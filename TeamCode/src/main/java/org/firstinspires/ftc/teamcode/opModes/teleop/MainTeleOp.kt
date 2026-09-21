@@ -3,10 +3,12 @@ package org.firstinspires.ftc.teamcode.opmodes.teleop
 import com.pedropathing.follower.ManualDrive
 import com.pedropathing.ivy.Command
 import com.pedropathing.ivy.commands.Commands.instant
+import com.pedropathing.math.Pose
 import dev.nextftc.robot.opmode.NextOpMode
 import dev.nextftc.robot.opmode.NextTeleop
 import dev.nextftc.robot.triggers.CommandGamepad
 import org.firstinspires.ftc.teamcode.BeaverRobot
+import org.firstinspires.ftc.teamcode.core.Dimensions
 import org.firstinspires.ftc.teamcode.utils.BiLinearShooter
 import org.firstinspires.ftc.teamcode.utils.BeaverLogger
 import org.firstinspires.ftc.teamcode.utils.PoseStorage
@@ -29,25 +31,7 @@ class MainTeleOp(val beaverRobot: BeaverRobot) : NextOpMode(beaverRobot) {
         beaverRobot.follower.setPose(PoseStorage.autonomousEndPose)
         logger = BeaverLogger()
 
-        val driver = CommandGamepad(gamepad1)
-        val operator = CommandGamepad(gamepad2)
-
-        driver.y.toggleOnTrue(instant { driveScalar = 0.5 })
-
-        driver.rightBumper
-            .toggleOnTrue(beaverRobot.intake.intake())
-
-        driver.leftBumper.toggleOnTrue(beaverRobot.intake.outtake())
-
-        driver.leftTrigger.isOver(0.5)
-            .toggleOnTrue(beaverRobot.spindexer.spinShot())
-            .toggleOnFalse(beaverRobot.spindexer.stop())
-            .toggleOnFalse(beaverRobot.spindexer.toIntakePos())
-
-        operator.a.toggleOnTrue(beaverRobot.spindexer.spinShotIndex())
-        operator.x.onTrue(beaverRobot.spindexer.autoIndex(0))
-        operator.y.onTrue(beaverRobot.spindexer.autoIndex(1))
-        operator.b.onTrue(beaverRobot.spindexer.autoIndex(2))
+        buildDriverControls()
 
         beaverRobot.turret.trackTarget()
     }
@@ -124,5 +108,33 @@ class MainTeleOp(val beaverRobot: BeaverRobot) : NextOpMode(beaverRobot) {
         logger.close()
         beaverRobot.turret.stopTracking()
         beaverRobot.shooter.stop().schedule()
+    }
+
+    fun buildDriverControls() {
+        val driver = CommandGamepad(gamepad1)
+        val operator = CommandGamepad(gamepad2)
+
+        // Driver Controls
+        driver.rightBumper
+            .toggleOnTrue(beaverRobot.intake.intake())
+
+        driver.leftBumper
+            .toggleOnTrue(beaverRobot.intake.outtake())
+
+        driver.leftTrigger.isOver(0.5)
+            .toggleOnTrue(beaverRobot.spindexer.spinShot())
+            .toggleOnFalse(beaverRobot.spindexer.stop())
+            .toggleOnFalse(beaverRobot.spindexer.toIntakePos())
+
+        driver.rightTrigger.isOver(0.5)
+            .toggleOnTrue(instant { beaverRobot.follower.setPose(PoseStorage.resetPose) })
+
+        driver.y.toggleOnTrue(instant { driveScalar = 0.5 })
+
+        // Operator Controls
+        operator.a.toggleOnTrue(beaverRobot.spindexer.spinShotIndex())
+        operator.x.onTrue(beaverRobot.spindexer.autoIndex(0))
+        operator.y.onTrue(beaverRobot.spindexer.autoIndex(1))
+        operator.b.onTrue(beaverRobot.spindexer.autoIndex(2))
     }
 }
