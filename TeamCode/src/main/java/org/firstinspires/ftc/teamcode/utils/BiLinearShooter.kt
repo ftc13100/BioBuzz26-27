@@ -92,8 +92,8 @@ object BiLinearShooter {
      * Update shooter, hood, and spindexer based on calculated parameters.
      */
     fun applyShot(params: ShotParameters, robot: BeaverRobot) {
-        robot.shooterAngle.targetPosition = params.angle + robot.shooterAngle.manualOffset
-        robot.shooterAngle.update().schedule()
+        robot.turretHood.targetPosition = params.angle + robot.turretHood.manualOffset
+        robot.turretHood.update().schedule()
         robot.shooter.spinAtSpeed(params.velocity + robot.shooter.manualOffset).schedule()
         robot.spindexer.spinShotSpeed = params.spinspeed
     }

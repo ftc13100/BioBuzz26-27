@@ -12,10 +12,10 @@ import kotlin.math.atan2
 import kotlin.math.cos
 import kotlin.math.sin
 
-class NewTurret(val follower: Follower) : Mechanism {
+class Turret(val follower: Follower) : Mechanism {
     val turret1 = NextServo(RobotHardware.S_TURRET1.deviceName)
     val turret2 = NextServo(RobotHardware.S_TURRET2.deviceName)
-    val turretDigital = NextMotor(RobotHardware.M_WHEEL_FR.deviceName)
+    val turretDigital = NextMotor(RobotHardware.Q_TURRET.deviceName)
 
     val LIMIT_LOW = 22.2
     val LIMIT_HIGH = 337.8
@@ -53,7 +53,7 @@ class NewTurret(val follower: Follower) : Mechanism {
 
         val goal = if (turretY > 50.0) BiLinearShooter.goalClose else BiLinearShooter.goalFar
 
-        // Project goal based on velocity lookahead
+        // Project position based on velocity lookahead
         val projectedY = turretY + robotVelocity.vy * BiLinearShooter.zoneProjectionLookahead
         val projectedX = turretX + robotVelocity.vx * BiLinearShooter.zoneProjectionLookahead
 

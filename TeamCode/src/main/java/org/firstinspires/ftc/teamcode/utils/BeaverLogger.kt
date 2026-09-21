@@ -7,11 +7,11 @@ import java.io.FileWriter
 /**
  * CSV logging of robot data to SD card
  */
-class LogTest {
+class BeaverLogger {
     private val writer: BufferedWriter
 
     init {
-        val file = File("/sdcard/FIRST/loggingtest.csv")
+        val file = File("/sdcard/FIRST/log.csv")
         writer = BufferedWriter(FileWriter(file))
 
         // CSV header

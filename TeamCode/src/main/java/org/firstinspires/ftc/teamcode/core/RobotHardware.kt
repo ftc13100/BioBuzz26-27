@@ -16,7 +16,7 @@ enum class RobotHardware(val deviceName: String) {
     A_TURRET("analog0"),
     A_SPINDEXER("analogS"),
 
-    D_TURRET("digital0"),
+    Q_TURRET("frontRight"),
 
     I2C_PINPOINT("pinpoint"),
     I2C_LED("i2c2"),

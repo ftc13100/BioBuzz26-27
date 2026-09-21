@@ -207,7 +207,7 @@ class Spindexer : Mechanism {
                  detectColorRGB(color1) != SpindexerColor.EMPTY &&
                  detectColorRGB(color2) != SpindexerColor.EMPTY)
 
-    fun artifactCount(): Int {
+    fun getArtifactCount(): Int {
         var count = 0
         if (detectColorRGB(color0) != SpindexerColor.EMPTY) count++
         if (detectColorRGB(color1) != SpindexerColor.EMPTY) count++

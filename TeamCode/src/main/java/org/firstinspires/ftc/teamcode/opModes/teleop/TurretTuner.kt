@@ -15,7 +15,7 @@ class TurretTuner(val beaverRobot: BeaverRobot) : NextOpMode(beaverRobot) {
 
     override fun start() {
         beaverRobot.turret.stopTracking()
-        
+
         val driver = CommandGamepad(gamepad1)
 
         driver.x.onTrue(instant {
@@ -40,12 +40,12 @@ class TurretTuner(val beaverRobot: BeaverRobot) : NextOpMode(beaverRobot) {
             -gamepad1.left_stick_x.toDouble(),
             -gamepad1.right_stick_x.toDouble()
         )
-        
+
         beaverRobot.updateFollower()
 
         val robotPose = beaverRobot.follower.pose()
         val turretRelPos = (beaverRobot.turret.turretDigital.encoderPosition.magnitude / 12000.0) * 360.0
-        
+
         telemetry.addData("Tracking Active", beaverRobot.turret.goalTrackingActive)
         telemetry.addData("X/Y", "(%.1f, %.1f)".format(robotPose.x(), robotPose.y()))
         telemetry.addData("Turret Pos (Field)", "(%.1f, %.1f)".format(beaverRobot.turret.turretX, beaverRobot.turret.turretY))

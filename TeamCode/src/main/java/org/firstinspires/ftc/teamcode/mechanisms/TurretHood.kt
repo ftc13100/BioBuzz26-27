@@ -5,7 +5,7 @@ import dev.nextftc.hardware.actuators.NextServo
 import dev.nextftc.robot.Mechanism
 import org.firstinspires.ftc.teamcode.core.RobotHardware
 
-class ShooterAngle : Mechanism {
+class TurretHood : Mechanism {
     val servo = NextServo(RobotHardware.S_TURRET_HOOD.deviceName)
 
     var targetPosition = 0.0

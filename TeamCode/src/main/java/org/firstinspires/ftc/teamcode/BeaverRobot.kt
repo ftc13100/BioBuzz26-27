@@ -7,8 +7,16 @@ import org.firstinspires.ftc.teamcode.mechanisms.*
 import org.firstinspires.ftc.teamcode.pedro.Constants
 
 class BeaverRobot : NextRobot {
-    private var _follower: Follower? = null
+    val intake = Intake()
+    val shooter = Shooter()
+    val turretHood = TurretHood()
+    val turret by lazy { Turret(follower) }
+    val spindexer = Spindexer()
     
+    override val mechanisms by lazy { setOf(intake, shooter, turretHood, turret, spindexer) }
+
+    private var _follower: Follower? = null
+
     val follower: Follower
         get() {
             if (_follower == null) {
@@ -16,14 +24,6 @@ class BeaverRobot : NextRobot {
             }
             return _follower!!
         }
-
-    val intake = Intake()
-    val shooter = Shooter()
-    val shooterAngle = ShooterAngle()
-    val turret by lazy { NewTurret(follower) }
-    val spindexer = Spindexer()
-    
-    override val mechanisms = setOf(intake, shooter, shooterAngle, turret, spindexer)
 
     fun updateFollower() {
         follower.update()
