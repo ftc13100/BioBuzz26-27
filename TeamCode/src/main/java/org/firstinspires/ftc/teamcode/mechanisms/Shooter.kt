@@ -53,6 +53,7 @@ class Shooter : Mechanism {
             if (abs(error) < 21.0 && !ready) {
                 ready = true
             }
+
         } else {
             motor.throttle = 0.0
             ready = false
