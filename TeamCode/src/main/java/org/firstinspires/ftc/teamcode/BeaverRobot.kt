@@ -3,7 +3,7 @@ package org.firstinspires.ftc.teamcode
 import com.pedropathing.follower.Follower
 import dev.nextftc.hardware.RobotController
 import dev.nextftc.robot.NextRobot
-import org.firstinspires.ftc.teamcode.mechanisms.Intake
+import org.firstinspires.ftc.teamcode.mechanisms.*
 import org.firstinspires.ftc.teamcode.pedro.Constants
 
 class BeaverRobot : NextRobot {
@@ -18,8 +18,12 @@ class BeaverRobot : NextRobot {
         }
 
     val intake = Intake()
+    val shooter = Shooter()
+    val shooterAngle = ShooterAngle()
+    val turret by lazy { NewTurret(follower) }
+    val spindexer = Spindexer()
     
-    override val mechanisms = setOf(intake)
+    override val mechanisms = setOf(intake, shooter, shooterAngle, turret, spindexer)
 
     fun updateFollower() {
         follower.update()
