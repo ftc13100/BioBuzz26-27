@@ -1,14 +1,9 @@
-package org.firstinspires.ftc.teamcode.utils
+package org.firstinspires.ftc.teamcode.core
 
 import com.pedropathing.math.Pose
-import org.firstinspires.ftc.teamcode.core.Dimensions
-
 
 object PoseStorage {
-    var blueAlliance = false
-    var redAlliance = false
-    var motif = 0
-    var resetPose = Pose(Dimensions.robotWidthCenter, Dimensions.robotLengthIntake, 180.0)
+    val resetPose = Pose(144.0 - Dimensions.robotWidthCenter, Dimensions.robotLengthIntake, 180.0)
     var autonomousEndPose: Pose = resetPose
 
     /**

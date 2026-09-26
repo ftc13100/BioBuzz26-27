@@ -1,17 +1,14 @@
 package org.firstinspires.ftc.teamcode.opmodes.teleop
-
 import com.pedropathing.follower.ManualDrive
 import com.pedropathing.ivy.Command
 import com.pedropathing.ivy.commands.Commands.instant
-import com.pedropathing.math.Pose
 import dev.nextftc.robot.opmode.NextOpMode
 import dev.nextftc.robot.opmode.NextTeleop
 import dev.nextftc.robot.triggers.CommandGamepad
 import org.firstinspires.ftc.teamcode.BeaverRobot
-import org.firstinspires.ftc.teamcode.core.Dimensions
 import org.firstinspires.ftc.teamcode.utils.BiLinearShooter
 import org.firstinspires.ftc.teamcode.utils.BeaverLogger
-import org.firstinspires.ftc.teamcode.utils.PoseStorage
+import org.firstinspires.ftc.teamcode.core.PoseStorage
 import kotlin.math.abs
 
 private const val TELEMETRY_INTERVAL: Int = 250
@@ -20,6 +17,7 @@ private var lastLoopTime = 0.0
 private var maxLoopTime = 0.0
 private var loopTimeAverage = 0.0
 private var lastTelemetryTime = 0.0
+private var startSystemTime = 0.toLong()
 
 @NextTeleop("MainTeleOp")
 class MainTeleOp(val beaverRobot: BeaverRobot) : NextOpMode(beaverRobot) {
@@ -34,6 +32,8 @@ class MainTeleOp(val beaverRobot: BeaverRobot) : NextOpMode(beaverRobot) {
         buildDriverControls()
 
         beaverRobot.turret.trackTarget()
+
+        startSystemTime = System.currentTimeMillis()
     }
 
     override fun periodic() {
@@ -63,7 +63,8 @@ class MainTeleOp(val beaverRobot: BeaverRobot) : NextOpMode(beaverRobot) {
             val shot = BiLinearShooter.getShot(
                 beaverRobot.turret.turretX,
                 beaverRobot.turret.turretY,
-                beaverRobot.follower.velocity().toVector()
+                beaverRobot.follower.velocity().toVector(),
+                beaverRobot.hiveManager.hiveOnRight
             )
             BiLinearShooter.applyShot(shot, beaverRobot)
         }
@@ -81,7 +82,6 @@ class MainTeleOp(val beaverRobot: BeaverRobot) : NextOpMode(beaverRobot) {
             lastTelemetryTime = now
             
             telemetry.addData("Loop Hz", "%.2f".format(1000.0 / loopTime))
-            telemetry.addData("Alliance", if (PoseStorage.blueAlliance) "BLUE" else "RED")
             telemetry.addData("Robot Pos", beaverRobot.follower.pose())
             telemetry.addData("Turret Pos", "(%.1f, %.1f)".format(beaverRobot.turret.turretX, beaverRobot.turret.turretY))
             telemetry.addData("Shooter RPM", beaverRobot.shooter.motor.encoderVelocity.magnitude)
@@ -89,7 +89,7 @@ class MainTeleOp(val beaverRobot: BeaverRobot) : NextOpMode(beaverRobot) {
             telemetry.update()
 
             logger.log(
-                System.currentTimeMillis(),
+                System.currentTimeMillis() - startSystemTime,
                 beaverRobot.follower.pose().x(),
                 beaverRobot.follower.pose().y(),
                 beaverRobot.follower.pose().heading(),
@@ -130,6 +130,7 @@ class MainTeleOp(val beaverRobot: BeaverRobot) : NextOpMode(beaverRobot) {
             .toggleOnTrue(instant { beaverRobot.follower.setPose(PoseStorage.resetPose) })
 
         driver.y.toggleOnTrue(instant { driveScalar = 0.5 })
+        driver.a.toggleOnTrue(beaverRobot.hiveManager.flipHive())
 
         // Operator Controls
         operator.a.toggleOnTrue(beaverRobot.spindexer.spinShotIndex())

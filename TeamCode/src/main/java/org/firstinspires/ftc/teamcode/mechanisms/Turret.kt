@@ -1,18 +1,18 @@
 package org.firstinspires.ftc.teamcode.mechanisms
 
 import com.pedropathing.follower.Follower
+import com.pedropathing.math.Pose
 import dev.nextftc.hardware.actuators.NextMotor
 import dev.nextftc.hardware.actuators.NextServo
 import dev.nextftc.robot.Mechanism
 import org.firstinspires.ftc.teamcode.core.RobotHardware
 import org.firstinspires.ftc.teamcode.utils.BiLinearShooter
-import org.firstinspires.ftc.teamcode.utils.PoseStorage
 import kotlin.math.abs
 import kotlin.math.atan2
 import kotlin.math.cos
 import kotlin.math.sin
 
-class Turret(val follower: Follower) : Mechanism {
+class Turret(val follower: Follower, val hiveManager: HiveManager) : Mechanism {
     val turret1 = NextServo(RobotHardware.S_TURRET1.deviceName)
     val turret2 = NextServo(RobotHardware.S_TURRET2.deviceName)
     val turretDigital = NextMotor(RobotHardware.Q_TURRET.deviceName)
@@ -51,18 +51,14 @@ class Turret(val follower: Follower) : Mechanism {
         turretX = robotPose.x() + TURRET_OFFSET * cos(robotPose.heading())
         turretY = robotPose.y() + TURRET_OFFSET * sin(robotPose.heading())
 
-        val goal = if (turretY > 50.0) BiLinearShooter.goalClose else BiLinearShooter.goalFar
+        val goal = hiveManager.getTargetPose(Pose(turretX, turretY, 90.0))
 
         // Project position based on velocity lookahead
         val projectedY = turretY + robotVelocity.vy * BiLinearShooter.zoneProjectionLookahead
         val projectedX = turretX + robotVelocity.vx * BiLinearShooter.zoneProjectionLookahead
 
         // Compute target field angle
-        targetAngleField = if (PoseStorage.blueAlliance) {
-            180.0 - Math.toDegrees(atan2(abs(goal.y() - projectedY), abs(goal.x() - projectedX)))
-        } else {
-            Math.toDegrees(atan2(abs(goal.y() - projectedY), abs(goal.x() - (141.5 - projectedX))))
-        }
+        180.0 - Math.toDegrees(atan2(abs(goal.y() - projectedY), abs(goal.x() - projectedX)))
 
         // Apply robot rotation and velocity compensation
         val targetAngleAV = targetAngleField + turretRobotAdj + (angularVel * kVF)
