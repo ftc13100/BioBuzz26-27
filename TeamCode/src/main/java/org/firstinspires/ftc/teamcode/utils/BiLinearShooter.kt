@@ -17,18 +17,17 @@ object BiLinearShooter {
     var useZoneProjection = true
     var zoneProjectionLookahead = 0.4
 
-    data class ShotParameters(val velocity: Double, val angle: Double, val spinspeed: Double)
+    data class ShotParameters(val velocity: Double, val angle: Double)
 
     private data class DataPoint(
         val x: Double,
         val y: Double,
         val velocity: Double,
-        val angle: Double,
-        val spinspeed: Double
+        val angle: Double
     )
 
     private val shotData = listOf(
-        DataPoint(72.0, 72.0, 900.0, 0.800, 1.0),
+        DataPoint(72.0, 72.0, 900.0, 0.800),
     )
 
     private const val IDW_POWER = 2.0
@@ -65,7 +64,7 @@ object BiLinearShooter {
         val minDistance = distances.minOrNull() ?: 0.0
         if (minDistance < EPSILON) {
             val exactPoint = shotData[distances.indexOf(minDistance)]
-            return ShotParameters(exactPoint.velocity, exactPoint.angle, exactPoint.spinspeed)
+            return ShotParameters(exactPoint.velocity, exactPoint.angle)
         }
 
         val weights = distances.map { 1.0 / it.pow(IDW_POWER) }
@@ -73,9 +72,8 @@ object BiLinearShooter {
 
         val velocityInterp = shotData.zip(weights).sumOf { it.first.velocity * it.second } / totalWeight
         val angleInterp = shotData.zip(weights).sumOf { it.first.angle * it.second } / totalWeight
-        val spinInterp = shotData.zip(weights).sumOf { it.first.spinspeed * it.second } / totalWeight
 
-        return ShotParameters(velocityInterp, angleInterp, spinInterp)
+        return ShotParameters(velocityInterp, angleInterp)
     }
 
     /**
@@ -85,6 +83,5 @@ object BiLinearShooter {
         robot.turretHood.targetPosition = params.angle + robot.turretHood.manualOffset
         robot.turretHood.update().schedule()
         robot.shooter.spinAtSpeed(params.velocity + robot.shooter.manualOffset).schedule()
-        robot.spindexer.spinShotSpeed = params.spinspeed
     }
 }

@@ -25,7 +25,7 @@ class MainTeleOp(val beaverRobot: BeaverRobot) : NextOpMode(beaverRobot) {
     private var driveScalar = 1.0
 
     override fun start() {
-        beaverRobot.follower.setPose(PoseStorage.autonomousEndPose)
+        beaverRobot.follower.setPose(PoseStorage.EndPose)
         logger = BeaverLogger()
         buildDriverControls()
         beaverRobot.turret.trackTarget()
@@ -94,6 +94,7 @@ class MainTeleOp(val beaverRobot: BeaverRobot) : NextOpMode(beaverRobot) {
     }
 
     override fun end() {
+        PoseStorage.EndPose = beaverRobot.follower.pose()
         logger.close()
         beaverRobot.turret.stopTracking()
         beaverRobot.shooter.stop().schedule()
