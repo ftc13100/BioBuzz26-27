@@ -10,10 +10,11 @@ class BeaverRobot : NextRobot {
     val intake = Intake()
     val shooter = Shooter()
     val turretHood = TurretHood()
-    val turret by lazy { Turret(follower) }
     val spindexer = Spindexer()
+    val hiveManager = HiveManager()
+    val turret by lazy { Turret(follower, hiveManager) }
     
-    override val mechanisms by lazy { setOf(intake, shooter, turretHood, turret, spindexer) }
+    override val mechanisms by lazy { setOf(intake, shooter, turretHood, turret, spindexer, hiveManager) }
 
     private var _follower: Follower? = null
 

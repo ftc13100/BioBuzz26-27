@@ -8,7 +8,7 @@ import dev.nextftc.hardware.sensors.NextAnalogInput
 import dev.nextftc.robot.Mechanism
 import dev.nextftc.units.radians
 import org.firstinspires.ftc.teamcode.core.RobotHardware
-import org.firstinspires.ftc.teamcode.utils.PoseStorage
+import org.firstinspires.ftc.teamcode.core.PoseStorage
 import kotlin.math.abs
 
 class Spindexer : Mechanism {
@@ -152,7 +152,7 @@ class Spindexer : Mechanism {
         val b0 = colorToDigit(detectColorRGB(color0))
         val b1 = colorToDigit(detectColorRGB(color1))
         val b2 = colorToDigit(detectColorRGB(color2))
-        val dexIndex = b0 * 81 + b1 * 27 + b2 * 9 + b3 * 3 + PoseStorage.motif
+        val dexIndex = b0 * 81 + b1 * 27 + b2 * 9 + b3 * 3
         val targetIdx = dexing[dexIndex]
         
         when (targetIdx) {
