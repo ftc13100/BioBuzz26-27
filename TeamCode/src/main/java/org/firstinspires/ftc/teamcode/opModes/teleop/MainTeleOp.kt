@@ -69,12 +69,15 @@ class MainTeleOp(val beaverRobot: BeaverRobot) : NextOpMode(beaverRobot) {
 
         if (now - lastTelemetryTime > TELEMETRY_INTERVAL) {
             lastTelemetryTime = now
-            
-            telemetry.addData("Loop Hz", "%.2f".format(1000.0 / loopTime))
+
+            telemetry.addLine("POSITIONS ----------------------")
             telemetry.addData("Robot Pos", beaverRobot.follower.pose())
             telemetry.addData("Turret Pos", "(%.1f, %.1f)".format(beaverRobot.turret.turretX, beaverRobot.turret.turretY))
+            telemetry.addLine("SHOOTER ------------------------")
             telemetry.addData("Shooter RPM", beaverRobot.shooter.motor.encoderVelocity.magnitude)
             telemetry.addData("Tracking Active", beaverRobot.turret.goalTrackingActive)
+            telemetry.addLine("MISC ---------------------------")
+            telemetry.addData("Loop Hz", "%.2f".format(1000.0 / loopTime))
             telemetry.update()
 
             logger.log(

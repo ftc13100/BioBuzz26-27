@@ -11,7 +11,7 @@ class HiveManager : Mechanism {
     }
 
     fun getTargetPose(robotPose: Pose): Pose {
-        var targetX = (0.5 * robotPose.x()) + 40
+        var targetX = 72.0
         val targetY = if (hiveOnRight) 56.0 else 144.0 - 56.0
         return Pose(targetX, targetY, 0.0)
     }
