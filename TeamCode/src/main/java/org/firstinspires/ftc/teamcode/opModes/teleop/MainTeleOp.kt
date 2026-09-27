@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.opmodes.teleop
 import com.pedropathing.follower.ManualDrive
-import com.pedropathing.ivy.Command
 import com.pedropathing.ivy.commands.Commands.instant
 import dev.nextftc.robot.opmode.NextOpMode
 import dev.nextftc.robot.opmode.NextTeleop
@@ -10,13 +9,12 @@ import org.firstinspires.ftc.teamcode.utils.BiLinearShooter
 import org.firstinspires.ftc.teamcode.utils.BeaverLogger
 import org.firstinspires.ftc.teamcode.core.PoseStorage
 import org.firstinspires.ftc.teamcode.utils.HiveManager
-import kotlin.math.abs
 
 private const val TELEMETRY_INTERVAL: Int = 250
 private var firstOnUpdate = true
 private var lastLoopTime = 0.0
 private var maxLoopTime = 0.0
-private var loopTimeAverage = 0.0
+private var minLoopTime = Double.MAX_VALUE
 private var lastTelemetryTime = 0.0
 private var startSystemTime = 0.toLong()
 
@@ -45,8 +43,8 @@ class MainTeleOp(val beaverRobot: BeaverRobot) : NextOpMode(beaverRobot) {
 
         val loopTime = now - lastLoopTime
         lastLoopTime = now
-        loopTimeAverage = loopTimeAverage * 0.95 + loopTime * 0.05
         if (loopTime > maxLoopTime) maxLoopTime = loopTime
+        if (loopTime < minLoopTime) minLoopTime = loopTime
 
         if (beaverRobot.follower.pose().y() > 72.0) HiveManager.setHiveLeft()
         else HiveManager.setHiveRight()
@@ -73,9 +71,16 @@ class MainTeleOp(val beaverRobot: BeaverRobot) : NextOpMode(beaverRobot) {
         if (now - lastTelemetryTime > TELEMETRY_INTERVAL) {
             lastTelemetryTime = now
 
-            telemetry.addLine("POSITIONS ----------------------")
+            //telemetry.addLine("POSITIONS ----------------------")
             telemetry.addData("Robot Pos", beaverRobot.follower.pose())
             telemetry.addData("Turret Pos", "(%.1f, %.1f)".format(beaverRobot.turret.turretX, beaverRobot.turret.turretY))
+            //telemetry.addLine("SHOOTER ------------------------")
+            telemetry.addData("Shooter RPM", beaverRobot.shooter.motor.encoderVelocity.magnitude)
+            telemetry.addData("Tracking Active", beaverRobot.turret.goalTrackingActive)
+            //telemetry.addLine("MISC ---------------------------")
+            telemetry.addData("Loop Time", "%.2f ms".format(loopTime))
+            telemetry.addData("Min Loop Time", "%.2f ms".format(minLoopTime))
+            telemetry.addData("Max Loop Time", "%.2f ms".format(maxLoopTime))
             telemetry.addData("Target Pos", HiveManager.getTargetPose())
             telemetry.addLine("SHOOTER ------------------------")
             telemetry.addData("Shooter", beaverRobot.shooter.targetVelocity + beaverRobot.shooter.manualOffset)
