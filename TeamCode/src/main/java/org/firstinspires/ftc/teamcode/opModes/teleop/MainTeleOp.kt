@@ -23,16 +23,12 @@ private var startSystemTime = 0.toLong()
 class MainTeleOp(val beaverRobot: BeaverRobot) : NextOpMode(beaverRobot) {
     private lateinit var logger: BeaverLogger
     private var driveScalar = 1.0
-    private var pathCommand: Command? = null
 
     override fun start() {
         beaverRobot.follower.setPose(PoseStorage.autonomousEndPose)
         logger = BeaverLogger()
-
         buildDriverControls()
-
         beaverRobot.turret.trackTarget()
-
         startSystemTime = System.currentTimeMillis()
     }
 
@@ -51,13 +47,6 @@ class MainTeleOp(val beaverRobot: BeaverRobot) : NextOpMode(beaverRobot) {
         loopTimeAverage = loopTimeAverage * 0.95 + loopTime * 0.05
         if (loopTime > maxLoopTime) maxLoopTime = loopTime
 
-        // Joystick Interruption of automated paths
-        if (pathCommand?.isScheduled == true || beaverRobot.follower.isBusy()) {
-            if (abs(gamepad1.left_stick_y) > 0.1 || abs(gamepad1.left_stick_x) > 0.1 || abs(gamepad1.right_stick_x) > 0.1) {
-                pathCommand?.cancel()
-                beaverRobot.follower.stop()
-            }
-        }
 
         if (beaverRobot.turret.goalTrackingActive) {
             val shot = BiLinearShooter.getShot(
@@ -129,7 +118,8 @@ class MainTeleOp(val beaverRobot: BeaverRobot) : NextOpMode(beaverRobot) {
         driver.rightTrigger.isOver(0.5)
             .toggleOnTrue(instant { beaverRobot.follower.setPose(PoseStorage.resetPose) })
 
-        driver.y.toggleOnTrue(instant { driveScalar = 0.5 })
+        driver.y.onTrue(instant { driveScalar = 0.5 })
+        driver.y.onFalse(instant {driveScalar = 1.0})
         driver.a.toggleOnTrue(beaverRobot.hiveManager.flipHive())
 
         // Operator Controls

@@ -58,7 +58,7 @@ class Turret(val follower: Follower, val hiveManager: HiveManager) : Mechanism {
         val projectedX = turretX + robotVelocity.vx * BiLinearShooter.zoneProjectionLookahead
 
         // Compute target field angle
-        180.0 - Math.toDegrees(atan2(abs(goal.y() - projectedY), abs(goal.x() - projectedX)))
+        targetAngleField = 180.0 - Math.toDegrees(atan2(abs(goal.y() - projectedY), abs(goal.x() - projectedX)))
 
         // Apply robot rotation and velocity compensation
         val targetAngleAV = targetAngleField + turretRobotAdj + (angularVel * kVF)

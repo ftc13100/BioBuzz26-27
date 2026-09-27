@@ -3,7 +3,7 @@ package org.firstinspires.ftc.teamcode.core
 import com.pedropathing.math.Pose
 
 object PoseStorage {
-    val resetPose = Pose(144.0 - Dimensions.robotWidthCenter, Dimensions.robotLengthIntake, 180.0)
+    val resetPose = Pose(Dimensions.robotLengthCenterBack, 144.0 - Dimensions.robotWidthCenter, 0.0)
     var autonomousEndPose: Pose = resetPose
 
     /**

@@ -16,6 +16,8 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 public class Constants {
 
+    private static MecanumConfig c;
+
     public static Follower create(HardwareMap h) {
         return new Follower(
                 new PinpointLocalizer(h, localizerConfig),
