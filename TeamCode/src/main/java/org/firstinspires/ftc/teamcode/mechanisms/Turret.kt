@@ -7,12 +7,13 @@ import dev.nextftc.hardware.actuators.NextServo
 import dev.nextftc.robot.Mechanism
 import org.firstinspires.ftc.teamcode.core.RobotHardware
 import org.firstinspires.ftc.teamcode.utils.BiLinearShooter
+import org.firstinspires.ftc.teamcode.utils.HiveManager
 import kotlin.math.abs
 import kotlin.math.atan2
 import kotlin.math.cos
 import kotlin.math.sin
 
-class Turret(val follower: Follower, val hiveManager: HiveManager) : Mechanism {
+class Turret(val follower: Follower) : Mechanism {
     val turret1 = NextServo(RobotHardware.S_TURRET1.deviceName)
     val turret2 = NextServo(RobotHardware.S_TURRET2.deviceName)
     val turretDigital = NextMotor(RobotHardware.Q_TURRET.deviceName)
@@ -51,7 +52,7 @@ class Turret(val follower: Follower, val hiveManager: HiveManager) : Mechanism {
         turretX = robotPose.x() + TURRET_OFFSET * cos(robotPose.heading())
         turretY = robotPose.y() + TURRET_OFFSET * sin(robotPose.heading())
 
-        val goal = hiveManager.getTargetPose(Pose(turretX, turretY, 90.0))
+        val goal = HiveManager.getTargetPose()
 
         val projectedY = turretY + robotVelocity.vy * BiLinearShooter.zoneProjectionLookahead
         val projectedX = turretX + robotVelocity.vx * BiLinearShooter.zoneProjectionLookahead

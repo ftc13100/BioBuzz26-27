@@ -27,7 +27,10 @@ object BiLinearShooter {
     )
 
     private val shotData = listOf(
-        DataPoint(72.0, 72.0, 900.0, 0.800),
+        DataPoint(x = 0.0, y = 45.97, velocity = 1280.0, angle = 0.15),
+        DataPoint(x = 0.0, y = 21.97, velocity = 1580.0, angle = 0.35),
+        DataPoint(x = 24.0, y = 21.97, velocity = 1380.0, angle = 0.3),
+        DataPoint(x = 48.0, y = 21.97, velocity = 1300.0, angle = 0.2),
     )
 
     private const val IDW_POWER = 2.0
@@ -37,7 +40,8 @@ object BiLinearShooter {
      * Get shot parameters based on current field position and velocity.
      */
     fun getShot(x: Double, y: Double, velocity: Vector, hiveOnRight: Boolean): ShotParameters {
-        // Apply lookahead based on robot velocity
+        val x = if (HiveManager.hiveOnRight) x else -x
+
         val velocityOffset = if (velocity.magnitude() > EPSILON) {
             velocity.normalized().times(velocity.magnitude() * zoneProjectionLookahead)
         } else {

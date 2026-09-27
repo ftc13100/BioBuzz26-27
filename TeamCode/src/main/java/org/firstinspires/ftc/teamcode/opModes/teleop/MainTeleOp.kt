@@ -9,6 +9,7 @@ import org.firstinspires.ftc.teamcode.BeaverRobot
 import org.firstinspires.ftc.teamcode.utils.BiLinearShooter
 import org.firstinspires.ftc.teamcode.utils.BeaverLogger
 import org.firstinspires.ftc.teamcode.core.PoseStorage
+import org.firstinspires.ftc.teamcode.utils.HiveManager
 import kotlin.math.abs
 
 private const val TELEMETRY_INTERVAL: Int = 250
@@ -47,13 +48,15 @@ class MainTeleOp(val beaverRobot: BeaverRobot) : NextOpMode(beaverRobot) {
         loopTimeAverage = loopTimeAverage * 0.95 + loopTime * 0.05
         if (loopTime > maxLoopTime) maxLoopTime = loopTime
 
+        if (beaverRobot.follower.pose().y() > 72.0) HiveManager.setHiveLeft()
+        else HiveManager.setHiveRight()
 
         if (beaverRobot.turret.goalTrackingActive) {
             val shot = BiLinearShooter.getShot(
-                beaverRobot.turret.turretX,
+                if (HiveManager.hiveOnRight) beaverRobot.turret.turretX else -beaverRobot.turret.turretX,
                 beaverRobot.turret.turretY,
                 beaverRobot.follower.velocity().toVector(),
-                beaverRobot.hiveManager.hiveOnRight
+                HiveManager.hiveOnRight
             )
             BiLinearShooter.applyShot(shot, beaverRobot)
         }
@@ -73,9 +76,10 @@ class MainTeleOp(val beaverRobot: BeaverRobot) : NextOpMode(beaverRobot) {
             telemetry.addLine("POSITIONS ----------------------")
             telemetry.addData("Robot Pos", beaverRobot.follower.pose())
             telemetry.addData("Turret Pos", "(%.1f, %.1f)".format(beaverRobot.turret.turretX, beaverRobot.turret.turretY))
+            telemetry.addData("Target Pos", HiveManager.getTargetPose())
             telemetry.addLine("SHOOTER ------------------------")
-            telemetry.addData("Shooter RPM", beaverRobot.shooter.motor.encoderVelocity.magnitude)
-            telemetry.addData("Tracking Active", beaverRobot.turret.goalTrackingActive)
+            telemetry.addData("Shooter", beaverRobot.shooter.targetVelocity + beaverRobot.shooter.manualOffset)
+            telemetry.addData("Hood", beaverRobot.turretHood.targetPosition + beaverRobot.turretHood.manualOffset)
             telemetry.addLine("MISC ---------------------------")
             telemetry.addData("Loop Hz", "%.2f".format(1000.0 / loopTime))
             telemetry.update()
@@ -124,12 +128,17 @@ class MainTeleOp(val beaverRobot: BeaverRobot) : NextOpMode(beaverRobot) {
 
         driver.y.onTrue(instant { driveScalar = 0.5 })
         driver.y.onFalse(instant {driveScalar = 1.0})
-        driver.a.toggleOnTrue(beaverRobot.hiveManager.flipHive())
+        driver.a.toggleOnTrue(instant { HiveManager.flipHive() })
 
         // Operator Controls
         operator.a.toggleOnTrue(beaverRobot.spindexer.spinShotIndex())
         operator.x.onTrue(beaverRobot.spindexer.autoIndex(0))
         operator.y.onTrue(beaverRobot.spindexer.autoIndex(1))
         operator.b.onTrue(beaverRobot.spindexer.autoIndex(2))
+
+        operator.dpadUp.onTrue(instant { beaverRobot.shooter.manualOffset += 10 })
+        operator.dpadDown.onTrue(instant { beaverRobot.shooter.manualOffset -= 10 })
+        operator.dpadRight.onTrue(instant { beaverRobot.turretHood.manualOffset += .05 })
+        operator.dpadLeft.onTrue(instant { beaverRobot.turretHood.manualOffset -= .05 })
     }
 }
