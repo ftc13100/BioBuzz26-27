@@ -4,7 +4,7 @@ import com.pedropathing.math.Pose
 
 object PoseStorage {
     val resetPose = Pose(Dimensions.robotLengthCenterBack, 144.0 - Dimensions.robotWidthCenter, 0.0)
-    var autonomousEndPose: Pose = resetPose
+    var EndPose: Pose = resetPose
 
     /**
      * Mirrors a pose because Pedro 3 removed it
