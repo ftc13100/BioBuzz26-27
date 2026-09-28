@@ -53,7 +53,6 @@ class MainTeleOp(val beaverRobot: BeaverRobot) : NextOpMode(beaverRobot) {
             val shot = BiLinearShooter.getShot(
                 if (HiveManager.hiveOnRight) beaverRobot.turret.turretX else -beaverRobot.turret.turretX,
                 beaverRobot.turret.turretY,
-                beaverRobot.follower.velocity().toVector(),
                 HiveManager.hiveOnRight
             )
             BiLinearShooter.applyShot(shot, beaverRobot)

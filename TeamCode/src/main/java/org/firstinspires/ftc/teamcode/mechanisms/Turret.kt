@@ -1,12 +1,10 @@
 package org.firstinspires.ftc.teamcode.mechanisms
 
 import com.pedropathing.follower.Follower
-import com.pedropathing.math.Pose
 import dev.nextftc.hardware.actuators.NextMotor
 import dev.nextftc.hardware.actuators.NextServo
 import dev.nextftc.robot.Mechanism
 import org.firstinspires.ftc.teamcode.core.RobotHardware
-import org.firstinspires.ftc.teamcode.utils.BiLinearShooter
 import org.firstinspires.ftc.teamcode.utils.HiveManager
 import kotlin.math.abs
 import kotlin.math.atan2
@@ -24,12 +22,11 @@ class Turret(val follower: Follower) : Mechanism {
     var targetServoPosition = 0.5
     var targetAngleRobotRef: Double = 180.0
     var targetAngleField: Double = 270.0
-    var angularVel = 0.0
 
     @JvmField var goalTrackingActive = false
-    @JvmField var kVF = -6.0
     @JvmField var TURRET_OFFSET = -2.03852
     @JvmField var manualOffsetAngle: Double = 0.0
+    @JvmField var kVF = 0.0
 
     var turretX = 0.0
     var turretY = 0.0
@@ -39,9 +36,6 @@ class Turret(val follower: Follower) : Mechanism {
         if (!goalTrackingActive) return
 
         val robotPose = follower.pose()
-        val robotVelocity = follower.velocity()
-        
-        angularVel = robotVelocity.omega
 
         // Robot heading in degrees for offset calculation
         var robotHeading = Math.toDegrees(robotPose.heading())
@@ -52,27 +46,21 @@ class Turret(val follower: Follower) : Mechanism {
         turretX = robotPose.x() + TURRET_OFFSET * cos(robotPose.heading())
         turretY = robotPose.y() + TURRET_OFFSET * sin(robotPose.heading())
 
-        val goal = HiveManager.getTargetPose()
+        // Calculate dynamic goal based directly on current turret X position
+        val goal = HiveManager.getTargetPose(turretX)
 
-        val projectedY = turretY + robotVelocity.vy * BiLinearShooter.zoneProjectionLookahead
-        val projectedX = turretX + robotVelocity.vx * BiLinearShooter.zoneProjectionLookahead
+        val dx = goal.x() - turretX
+        val dy = goal.y() - turretY
 
-        val dx = goal.x() - projectedX
-        val dy = goal.y() - projectedY
-
-        var targetAngleRad = atan2(dy, dx)
+        val targetAngleRad = atan2(dy, dx)
         targetAngleField = Math.toDegrees(targetAngleRad)
         if (targetAngleField < 0.0) targetAngleField += 360.0
 
-        val targetAngleAV = targetAngleField + turretRobotAdj + (angularVel * kVF)
-        toAngle(targetAngleAV + manualOffsetAngle)
+        val targetAngleRobot = targetAngleField + turretRobotAdj
+        toAngle(targetAngleRobot + manualOffsetAngle)
         
         val turretRelativePos = (turretDigital.encoderPosition.magnitude / 12000.0) * 360.0
-        if (abs(turretRelativePos - targetAngleRobotRef) < 2.0) {
-            targetReached = true
-        } else {
-            targetReached = false
-        }
+        targetReached = abs(turretRelativePos - targetAngleRobotRef) < 2.0
     }
 
     fun toAngle(angle: Double) {

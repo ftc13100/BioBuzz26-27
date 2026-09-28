@@ -7,6 +7,7 @@ enum class RobotHardware(val deviceName: String) {
     M_WHEEL_BL("backLeft"),
     M_SHOOTER("shooter"),
     M_SPINDEXER("spindexer"),
+    M_TRANSFER("transfer"),
     M_INTAKE("intake"),
 
     S_TURRET1("turret1"),

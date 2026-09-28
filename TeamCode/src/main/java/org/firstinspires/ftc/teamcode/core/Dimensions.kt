@@ -1,6 +1,9 @@
 package org.firstinspires.ftc.teamcode.core
 
 object Dimensions {
+
+    val FIELD_WIDTH = 141.5
+
     val robotWidth = 17.0
     val robotLength = 18.0
 

@@ -1,21 +1,16 @@
 package org.firstinspires.ftc.teamcode.utils
 
-import com.pedropathing.math.Pose
-import com.pedropathing.math.Vector
-import dev.nextftc.units.radians
 import org.firstinspires.ftc.teamcode.BeaverRobot
 import kotlin.math.pow
 import kotlin.math.sqrt
 
 /**
- * shot parameters using Inverse Distance Weighting (IDW) interpolation.
+ * Shot parameters using interpolation.
  */
 object BiLinearShooter {
+
     var projectedX = 0.0
     var projectedY = 0.0
-
-    var useZoneProjection = true
-    var zoneProjectionLookahead = 0.4
 
     data class ShotParameters(val velocity: Double, val angle: Double)
 
@@ -27,40 +22,32 @@ object BiLinearShooter {
     )
 
     private val shotData = listOf(
-        DataPoint(x = 0.0, y = 45.97, velocity = 1280.0, angle = 0.15),
-        DataPoint(x = 0.0, y = 21.97, velocity = 1580.0, angle = 0.35),
-        DataPoint(x = 24.0, y = 21.97, velocity = 1380.0, angle = 0.3),
-        DataPoint(x = 48.0, y = 21.97, velocity = 1300.0, angle = 0.2),
-    )
+        DataPoint(72.0, 72.0, 900.0, 0.800),
+        )
 
     private const val IDW_POWER = 2.0
     private const val EPSILON = 1e-6
 
     /**
-     * Get shot parameters based on current field position and velocity.
+     * Get shot parameters based directly on current position.
      */
-    fun getShot(x: Double, y: Double, velocity: Vector, hiveOnRight: Boolean): ShotParameters {
-        val x = if (HiveManager.hiveOnRight) x else -x
+    fun getShot(x: Double, y: Double, hiveOnRight: Boolean): ShotParameters {
+        val posX = if (hiveOnRight) x else -x
+        val posY = y
 
-        val velocityOffset = if (velocity.magnitude() > EPSILON) {
-            velocity.normalized().times(velocity.magnitude() * zoneProjectionLookahead)
-        } else {
-            Vector(0.0, 0.0)
-        }
-        
-        projectedX = x + velocityOffset.elements[0]
-        projectedY = y + velocityOffset.elements[1]
+        projectedX = posX
+        projectedY = posY
 
         var distances = shotData.map { point ->
-            val dx = projectedX - point.x
-            val dy = projectedY - point.y
+            val dx = posX - point.x
+            val dy = posY - point.y
             sqrt(dx * dx + dy * dy)
         }
 
         if (!hiveOnRight) {
             distances = shotData.map { point ->
-                val dx = -(projectedX - point.x)
-                val dy = projectedY - point.y
+                val dx = -(posX - point.x)
+                val dy = posY - point.y
                 sqrt(dx * dx + dy * dy)
             }
         }
@@ -81,7 +68,7 @@ object BiLinearShooter {
     }
 
     /**
-     * Update shooter, hood, and spindexer based on calculated parameters.
+     * Update shooter and hood based on calculated parameters.
      */
     fun applyShot(params: ShotParameters, robot: BeaverRobot) {
         robot.turretHood.targetPosition = params.angle + robot.turretHood.manualOffset
