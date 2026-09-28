@@ -12,6 +12,8 @@ object HiveManager {
     @JvmField var lineXMax = 69.0
     @JvmField var midXRobot = 59.0
 
+    // These values should actually be based off of turret position
+
     /**
      * Calculates the dynamic target Pose on the hive opening line based on current robot Y position
      * Uses 3 point linear interpolation that we can tune
