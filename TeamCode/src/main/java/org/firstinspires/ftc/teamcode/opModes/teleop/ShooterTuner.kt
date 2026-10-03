@@ -19,6 +19,7 @@ class ShooterTuner(val beaverRobot: BeaverRobot) : NextOpMode(beaverRobot) {
 
         driver.a.onTrue(beaverRobot.shooter.spinAtSpeed(targetVel))
         driver.b.onTrue(beaverRobot.shooter.stop())
+
     }
 
     override fun periodic() {
