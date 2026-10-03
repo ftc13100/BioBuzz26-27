@@ -74,27 +74,24 @@ class MainTeleOp(val beaverRobot: BeaverRobot) : NextOpMode(beaverRobot) {
             telemetry.addData("Turret Pos", "(%.1f, %.1f)".format(beaverRobot.turret.turretX, beaverRobot.turret.turretY))
             telemetry.addData("Target Pos", HiveManager.getTargetPose(beaverRobot.turret.turretX))
             telemetry.addData("Shooter Vel", beaverRobot.shooter.motor.encoderVelocity.magnitude)
-            telemetry.addData("Loop Time", "%.2f ms".format(loopTime))
-            telemetry.addData("Min Loop Time", "%.2f ms".format(minLoopTime))
-            telemetry.addData("Max Loop Time", "%.2f ms".format(maxLoopTime))
+            telemetry.addData("Loop Time", "%.2f ms (Min: %.2f, Max: %.2f)".format(loopTime, if (minLoopTime == Double.MAX_VALUE) 0.0 else minLoopTime, maxLoopTime))
             telemetry.addData("Shooter", beaverRobot.shooter.targetVelocity + beaverRobot.shooter.manualOffset)
             telemetry.addData("Hood", beaverRobot.turretHood.targetPosition + beaverRobot.turretHood.manualOffset)
-            telemetry.addData("Loop Hz", "%.2f".format(1000.0 / loopTime))
             telemetry.update()
 
-            logger.log(
-                System.currentTimeMillis() - startSystemTime,
-                beaverRobot.follower.pose().x(),
-                beaverRobot.follower.pose().y(),
-                beaverRobot.follower.pose().heading(),
-                BiLinearShooter.projectedX,
-                BiLinearShooter.projectedY,
-                beaverRobot.turret.targetAngleField,
-                beaverRobot.turret.targetAngleRobotRef,
-                beaverRobot.shooter.targetVelocity,
-                beaverRobot.shooter.motor.encoderVelocity.magnitude,
-                beaverRobot.shooter.motor.throttle
-            )
+//            logger.log(
+//                System.currentTimeMillis() - startSystemTime,
+//                beaverRobot.follower.pose().x(),
+//                beaverRobot.follower.pose().y(),
+//                beaverRobot.follower.pose().heading(),
+//                BiLinearShooter.projectedX,
+//                BiLinearShooter.projectedY,
+//                beaverRobot.turret.targetAngleField,
+//                beaverRobot.turret.targetAngleRobotRef,
+//                beaverRobot.shooter.targetVelocity,
+//                beaverRobot.shooter.motor.encoderVelocity.magnitude,
+//                beaverRobot.shooter.motor.throttle
+//            )
         }
     }
 
