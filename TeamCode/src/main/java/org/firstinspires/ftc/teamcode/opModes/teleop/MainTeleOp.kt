@@ -127,9 +127,9 @@ class MainTeleOp(val beaverRobot: BeaverRobot) : NextOpMode(beaverRobot) {
 
         // Operator Controls
         operator.a.toggleOnTrue(beaverRobot.spindexer.spinShotIndex())
-        operator.x.onTrue(beaverRobot.spindexer.autoIndex(0))
-        operator.y.onTrue(beaverRobot.spindexer.autoIndex(1))
-        operator.b.onTrue(beaverRobot.spindexer.autoIndex(2))
+//        operator.x.onTrue(beaverRobot.spindexer.autoIndex(0))
+//        operator.y.onTrue(beaverRobot.spindexer.autoIndex(1))
+//        operator.b.onTrue(beaverRobot.spindexer.autoIndex(2))
 
         operator.dpadUp.onTrue(instant { beaverRobot.shooter.manualOffset += 10 })
         operator.dpadDown.onTrue(instant { beaverRobot.shooter.manualOffset -= 10 })

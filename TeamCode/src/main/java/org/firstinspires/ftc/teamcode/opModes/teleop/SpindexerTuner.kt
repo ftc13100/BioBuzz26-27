@@ -21,9 +21,9 @@ class SpindexerTuner(val beaverRobot: BeaverRobot) : NextOpMode(beaverRobot) {
         driver.dpadLeft.onTrue(instant { beaverRobot.spindexer.target -= 10.0 })
 
         // Auto-indexing tests
-        operator.x.onTrue(beaverRobot.spindexer.autoIndex(0))
-        operator.y.onTrue(beaverRobot.spindexer.autoIndex(1))
-        operator.b.onTrue(beaverRobot.spindexer.autoIndex(2))
+//        operator.x.onTrue(beaverRobot.spindexer.autoIndex(0))
+//        operator.y.onTrue(beaverRobot.spindexer.autoIndex(1))
+//        operator.b.onTrue(beaverRobot.spindexer.autoIndex(2))
 
         operator.a.toggleOnTrue(beaverRobot.spindexer.spinShot())
     }
@@ -42,9 +42,9 @@ class SpindexerTuner(val beaverRobot: BeaverRobot) : NextOpMode(beaverRobot) {
         telemetry.addData("Target", beaverRobot.spindexer.target)
         telemetry.addData("Current (Amps)", "%.3f".format(current))
 
-        telemetry.addData("S0", beaverRobot.spindexer.detectColorRGB(beaverRobot.spindexer.color0))
-        telemetry.addData("S1", beaverRobot.spindexer.detectColorRGB(beaverRobot.spindexer.color1))
-        telemetry.addData("S2", beaverRobot.spindexer.detectColorRGB(beaverRobot.spindexer.color2))
+//        telemetry.addData("S0", beaverRobot.spindexer.detectColorRGB(beaverRobot.spindexer.color0))
+//        telemetry.addData("S1", beaverRobot.spindexer.detectColorRGB(beaverRobot.spindexer.color1))
+//        telemetry.addData("S2", beaverRobot.spindexer.detectColorRGB(beaverRobot.spindexer.color2))
 
         telemetry.update()
     }
