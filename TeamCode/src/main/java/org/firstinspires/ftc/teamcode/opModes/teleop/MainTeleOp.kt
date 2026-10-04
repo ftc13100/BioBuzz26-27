@@ -7,7 +7,7 @@ import dev.nextftc.robot.triggers.CommandGamepad
 import org.firstinspires.ftc.teamcode.BeaverRobot
 import org.firstinspires.ftc.teamcode.utils.BiLinearShooter
 import org.firstinspires.ftc.teamcode.utils.BeaverLogger
-import org.firstinspires.ftc.teamcode.core.PoseStorage
+import org.firstinspires.ftc.teamcode.core.PoseManager
 import org.firstinspires.ftc.teamcode.utils.HiveManager
 
 private const val TELEMETRY_INTERVAL: Int = 250
@@ -24,7 +24,7 @@ class MainTeleOp(val beaverRobot: BeaverRobot) : NextOpMode(beaverRobot) {
     private var driveScalar = 1.0
 
     override fun start() {
-        beaverRobot.follower.setPose(PoseStorage.EndPose)
+        beaverRobot.follower.setPose(PoseManager.EndPose)
         logger = BeaverLogger()
         buildDriverControls()
         beaverRobot.turret.trackTarget()
@@ -106,7 +106,7 @@ class MainTeleOp(val beaverRobot: BeaverRobot) : NextOpMode(beaverRobot) {
     }
 
     override fun end() {
-        PoseStorage.EndPose = beaverRobot.follower.pose()
+        PoseManager.EndPose = beaverRobot.follower.pose()
         logger.close()
         beaverRobot.turret.stopTracking()
         beaverRobot.shooter.stop().schedule()
@@ -128,12 +128,14 @@ class MainTeleOp(val beaverRobot: BeaverRobot) : NextOpMode(beaverRobot) {
             .toggleOnFalse(beaverRobot.spindexer.stop())
             .toggleOnFalse(beaverRobot.spindexer.toIntakePos())
 
+        driver.rightTrigger.isOver(0.5).and(driver.leftTrigger.isOver(0.5))
+            .toggleOnTrue(instant { beaverRobot.follower.setPose(PoseManager.masterResetPose) })
+
         driver.rightTrigger.isOver(0.5)
-            .toggleOnTrue(instant { beaverRobot.follower.setPose(PoseStorage.resetPose) })
+            .toggleOnTrue(instant { beaverRobot.follower.setPose(PoseManager.getResetPose(beaverRobot.follower.pose())) })
 
         driver.y.onTrue(instant { driveScalar = 0.5 })
         driver.y.onFalse(instant {driveScalar = 1.0})
-        driver.a.toggleOnTrue(instant { HiveManager.flipHive() })
 
         // Operator Controls
         operator.a.toggleOnTrue(beaverRobot.spindexer.spinShotIndex())
