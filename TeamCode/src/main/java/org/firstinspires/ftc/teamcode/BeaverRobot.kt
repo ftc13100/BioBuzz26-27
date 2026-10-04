@@ -11,7 +11,7 @@ class BeaverRobot : NextRobot {
     val shooter = Shooter()
     val turretHood = TurretHood()
     val spindexer = Spindexer()
-    val transfer = Transfer()
+//    val transfer = Transfer()
     val turret by lazy { Turret(follower) }
     
     override val mechanisms by lazy { setOf(intake, shooter, turretHood, turret, spindexer) }

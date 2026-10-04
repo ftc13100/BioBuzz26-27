@@ -14,10 +14,10 @@ import kotlin.math.abs
 class Spindexer : Mechanism {
     val motor = NextMotor(RobotHardware.M_SPINDEXER.deviceName)
     val analogS = NextAnalogInput({ RobotController.hardwareMap.get(RobotHardware.A_SPINDEXER.deviceName) as com.qualcomm.robotcore.hardware.AnalogInput })
-    
-    val color0: NormalizedColorSensor by lazy { RobotController.hardwareMap.get(NormalizedColorSensor::class.java, RobotHardware.I2C_COLOR0.deviceName) }
-    val color1: NormalizedColorSensor by lazy { RobotController.hardwareMap.get(NormalizedColorSensor::class.java, RobotHardware.I2C_COLOR1.deviceName) }
-    val color2: NormalizedColorSensor by lazy { RobotController.hardwareMap.get(NormalizedColorSensor::class.java, RobotHardware.I2C_COLOR2.deviceName) }
+
+//    val color0: NormalizedColorSensor by lazy { RobotController.hardwareMap.get(NormalizedColorSensor::class.java, RobotHardware.I2C_COLOR0.deviceName) }
+//    val color1: NormalizedColorSensor by lazy { RobotController.hardwareMap.get(NormalizedColorSensor::class.java, RobotHardware.I2C_COLOR1.deviceName) }
+//    val color2: NormalizedColorSensor by lazy { RobotController.hardwareMap.get(NormalizedColorSensor::class.java, RobotHardware.I2C_COLOR2.deviceName) }
 
     @JvmField var target = 0.0
     @JvmField var kP = -0.0015
@@ -148,19 +148,19 @@ class Spindexer : Mechanism {
         .setEnd { _ -> state = State.MANUAL }
         .requiring(this)
 
-    fun autoIndex(b3: Int): Command = instant {
-        val b0 = colorToDigit(detectColorRGB(color0))
-        val b1 = colorToDigit(detectColorRGB(color1))
-        val b2 = colorToDigit(detectColorRGB(color2))
-        val dexIndex = b0 * 81 + b1 * 27 + b2 * 9 + b3 * 3
-        val targetIdx = dexing[dexIndex]
-        
-        when (targetIdx) {
-            0 -> indexTo(0.0).schedule()
-            1 -> indexTo(STEP).schedule()
-            2 -> indexTo(STEP * 2).schedule()
-        }
-    }.requiring(this)
+//    fun autoIndex(b3: Int): Command = instant {
+//        val b0 = colorToDigit(detectColorRGB(color0))
+//        val b1 = colorToDigit(detectColorRGB(color1))
+//        val b2 = colorToDigit(detectColorRGB(color2))
+//        val dexIndex = b0 * 81 + b1 * 27 + b2 * 9 + b3 * 3
+//        val targetIdx = dexing[dexIndex]
+//
+//        when (targetIdx) {
+//            0 -> indexTo(0.0).schedule()
+//            1 -> indexTo(STEP).schedule()
+//            2 -> indexTo(STEP * 2).schedule()
+//        }
+//    }.requiring(this)
 
     fun spin() {
         state = State.PID
@@ -202,18 +202,18 @@ class Spindexer : Mechanism {
     val isBusy: Boolean
         get() = state == State.PID || (state == State.MANUAL && abs(motor.throttle) > 0.1)
 
-    val isFull: Boolean
-        get() = (detectColorRGB(color0) != SpindexerColor.EMPTY &&
-                 detectColorRGB(color1) != SpindexerColor.EMPTY &&
-                 detectColorRGB(color2) != SpindexerColor.EMPTY)
-
-    fun getArtifactCount(): Int {
-        var count = 0
-        if (detectColorRGB(color0) != SpindexerColor.EMPTY) count++
-        if (detectColorRGB(color1) != SpindexerColor.EMPTY) count++
-        if (detectColorRGB(color2) != SpindexerColor.EMPTY) count++
-        return count
-    }
+//    val isFull: Boolean
+//        get() = (detectColorRGB(color0) != SpindexerColor.EMPTY &&
+//                 detectColorRGB(color1) != SpindexerColor.EMPTY &&
+//                 detectColorRGB(color2) != SpindexerColor.EMPTY)
+//
+//    fun getArtifactCount(): Int {
+//        var count = 0
+//        if (detectColorRGB(color0) != SpindexerColor.EMPTY) count++
+//        if (detectColorRGB(color1) != SpindexerColor.EMPTY) count++
+//        if (detectColorRGB(color2) != SpindexerColor.EMPTY) count++
+//        return count
+//    }
 
     private val dexing = intArrayOf(-1, -1, -1, -1, -1, -1, -1, -1, -1, 0, 1, 0, 0, 0, 1, 1, 0, 0, 2, 0, 1,
         1, 2, 0, 0, 1, 2, 0, 0, 1, 1, 0, 0, 0, 1, 0, 0, 1, 2, 2, 0, 1, 1, 2, 0, 2, 0, 1, 1, 2, 0, 0,

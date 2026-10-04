@@ -8,11 +8,13 @@ import com.pedropathing.math.Matrix;
 import com.pedropathing.math.Vector2D;
 import com.pedropathing.revhub.drivetrains.Mecanum;
 import com.pedropathing.revhub.drivetrains.MecanumConfig;
-import com.pedropathing.revhub.localizers.PinpointConfig;
-import com.pedropathing.revhub.localizers.PinpointLocalizer;
-import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
+import com.pedropathing.revhub.localizers.OctoQuadConfig;
+import com.pedropathing.revhub.localizers.OctoQuadLocalizer;
+import com.qualcomm.hardware.digitalchickenlabs.OctoQuad;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import org.firstinspires.ftc.teamcode.pedro.procedures.OctoQuadTuner;
 
 public class Constants {
 
@@ -20,7 +22,7 @@ public class Constants {
 
     public static Follower create(HardwareMap h) {
         return new Follower(
-                new PinpointLocalizer(h, localizerConfig),
+                new OctoQuadLocalizer(h, localizerConfig),
                 new Mecanum(h, drivetrainConfig),
                 new Foresight(foresightConfig)
         );
@@ -41,13 +43,20 @@ public class Constants {
             }
     );
 
-    public static PinpointConfig localizerConfig = new PinpointConfig(
+    public static OctoQuadConfig localizerConfig = new OctoQuadConfig(
             c -> {
-                c.name.set("pinpoint");
+                c.name.set("octoquad");
+                c.xPodPort.set(0);
+                c.yPodPort.set(1);
+                c.ticksPerUnit.set(OctoQuadTuner.FOUR_BAR);
                 c.xPodOffset.set(2.187);
                 c.yPodOffset.set(-4.572);
-                c.xPodDirection.set(GoBildaPinpointDriver.EncoderDirection.FORWARD);
-                c.yPodDirection.set(GoBildaPinpointDriver.EncoderDirection.FORWARD);
+                c.xPodDirection.set(OctoQuad.EncoderDirection.REVERSE);
+                c.yPodDirection.set(OctoQuad.EncoderDirection.FORWARD);
+                c.globalDistanceUnit.set(DistanceUnit.INCH);
+                c.offsetUnits.set(DistanceUnit.INCH);
+                c.i2cRecoveryMode.set(OctoQuad.I2cRecoveryMode.MODE_1_PERIPH_RST_ON_FRAME_ERR);
+                c.headingScalar.set(1.0);
             }
     );
 
