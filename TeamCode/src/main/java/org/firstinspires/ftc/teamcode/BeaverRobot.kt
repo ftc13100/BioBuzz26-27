@@ -2,12 +2,19 @@ package org.firstinspires.ftc.teamcode
 
 import com.pedropathing.follower.Follower
 import dev.nextftc.hardware.RobotController
+import dev.nextftc.robot.Mechanism
 import dev.nextftc.robot.NextRobot
-import org.firstinspires.ftc.teamcode.mechanisms.*
+import org.firstinspires.ftc.teamcode.mechanisms.Intake
+import org.firstinspires.ftc.teamcode.mechanisms.Shooter
+import org.firstinspires.ftc.teamcode.mechanisms.Spindexer
+import org.firstinspires.ftc.teamcode.mechanisms.Turret
+import org.firstinspires.ftc.teamcode.mechanisms.TurretHood
 import org.firstinspires.ftc.teamcode.pedro.Constants
+
 
 class BeaverRobot : NextRobot {
     val intake = Intake()
+
     val shooter = Shooter()
     val turretHood = TurretHood()
     val turret by lazy { Turret(follower) }
@@ -28,4 +35,6 @@ class BeaverRobot : NextRobot {
     fun updateFollower() {
         follower.update()
     }
+
+
 }
