@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode
 
+import HiveManager
 import com.pedropathing.follower.Follower
 import com.pedropathing.math.Pose
 import dev.nextftc.hardware.RobotController
@@ -13,7 +14,8 @@ class BeaverRobot : NextRobot {
     val turretHood = TurretHood()
     val spindexer = Spindexer()
     val turret by lazy { Turret(follower) }
-    
+    val hiveManager = HiveManager()
+
     override val mechanisms by lazy { setOf(intake, shooter, turretHood, turret, spindexer) }
 
     private var _follower: Follower? = null

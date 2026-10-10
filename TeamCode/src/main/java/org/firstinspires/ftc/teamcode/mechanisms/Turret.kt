@@ -7,7 +7,7 @@ import dev.nextftc.hardware.actuators.NextServo
 import dev.nextftc.robot.Mechanism
 import org.firstinspires.ftc.teamcode.core.RobotHardware
 import org.firstinspires.ftc.teamcode.utils.BiLinearShooter
-import org.firstinspires.ftc.teamcode.utils.HiveManager
+import org.firstinspires.ftc.teamcode.mechanisms.HiveManager
 import kotlin.math.abs
 import kotlin.math.atan2
 import kotlin.math.cos
