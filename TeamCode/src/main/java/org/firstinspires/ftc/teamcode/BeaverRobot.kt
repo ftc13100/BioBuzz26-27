@@ -9,14 +9,14 @@ import org.firstinspires.ftc.teamcode.mechanisms.*
 import org.firstinspires.ftc.teamcode.pedro.Constants
 
 class BeaverRobot : NextRobot {
+    val hiveManager by lazy { HiveManager() }
     val intake = Intake()
     val shooter = Shooter()
     val turretHood = TurretHood()
+    val turret by lazy { Turret(follower, hiveManager) }
     val spindexer = Spindexer()
-    val turret by lazy { Turret(follower) }
-    val hiveManager = HiveManager()
 
-    override val mechanisms by lazy { setOf(intake, shooter, turretHood, turret, spindexer) }
+    override val mechanisms by lazy { setOf(hiveManager, intake, shooter, turretHood, turret, spindexer) }
 
     private var _follower: Follower? = null
 

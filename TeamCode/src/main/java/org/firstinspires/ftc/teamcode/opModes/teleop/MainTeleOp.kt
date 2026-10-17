@@ -10,7 +10,6 @@ import org.firstinspires.ftc.teamcode.BeaverRobot
 import org.firstinspires.ftc.teamcode.utils.BiLinearShooter
 import org.firstinspires.ftc.teamcode.utils.BeaverLogger
 import org.firstinspires.ftc.teamcode.core.PoseManager
-import org.firstinspires.ftc.teamcode.mechanisms.HiveManager
 
 private const val TELEMETRY_INTERVAL: Int = 250
 private var firstOnUpdate = true
@@ -48,15 +47,15 @@ class MainTeleOp(val beaverRobot: BeaverRobot) : NextOpMode(beaverRobot) {
         if (loopTime > maxLoopTime) maxLoopTime = loopTime
         if (loopTime < minLoopTime) minLoopTime = loopTime
 
-        if (beaverRobot.follower.pose().y() > 72.0) HiveManager.setHiveLeft()
-        else HiveManager.setHiveRight()
+        if (beaverRobot.follower.pose().y() > 72.0) beaverRobot.hiveManager.setHiveLeft()
+        else beaverRobot.hiveManager.setHiveRight()
 
         if (beaverRobot.turret.goalTrackingActive) {
             val shot = BiLinearShooter.getShot(
-                if (HiveManager.hiveOnRight) beaverRobot.turret.turretX else -beaverRobot.turret.turretX,
+                if (beaverRobot.hiveManager.hiveOnRight) beaverRobot.turret.turretX else -beaverRobot.turret.turretX,
                 beaverRobot.turret.turretY,
                 beaverRobot.follower.velocity().toVector(),
-                HiveManager.hiveOnRight
+                beaverRobot.hiveManager.hiveOnRight
             )
             BiLinearShooter.applyShot(shot, beaverRobot)
         }
@@ -81,7 +80,7 @@ class MainTeleOp(val beaverRobot: BeaverRobot) : NextOpMode(beaverRobot) {
             telemetry.addData("Loop Time", "%.2f ms".format(loopTime))
             telemetry.addData("Min Loop Time", "%.2f ms".format(minLoopTime))
             telemetry.addData("Max Loop Time", "%.2f ms".format(maxLoopTime))
-            telemetry.addData("Target Pos", HiveManager.getTargetPose())
+            telemetry.addData("Target Pos", beaverRobot.hiveManager.getTargetPose())
 
             telemetry.addData("Shooter", beaverRobot.shooter.targetVelocity + beaverRobot.shooter.manualOffset)
             telemetry.addData("Hood", beaverRobot.turretHood.targetPosition + beaverRobot.turretHood.manualOffset)
