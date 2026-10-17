@@ -24,7 +24,7 @@ public class CVTest extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         follower = Constants.create(hardwareMap);
-        follower.setPose(new Pose(35,8.5,Math.toRadians(90)));
+        follower.setPose(new Pose(24,118,Math.toRadians(-90)));
         follower.update();
         pather = new CVPathGen(hardwareMap,follower, isRed, telemetry);
 

@@ -65,7 +65,7 @@ public class CVPathGen {
         if (result != null && result.isValid()) {//get deg of each ball from ll
             Pose po = follower.pose();
             for (LLResultTypes.DetectorResult dr : result.getDetectorResults()) {
-                if (!"pollen".equalsIgnoreCase(dr.getClassName())) { // changed to pollen only to test
+                if (!"yellow_pollen".equalsIgnoreCase(dr.getClassName())) { // changed to pollen only to test
                     continue;
                 }
                 relativeBalls.add(new double[]{Math.toRadians(dr.getTargetXDegrees()), Math.toRadians(dr.getTargetYDegrees())});

@@ -42,8 +42,8 @@ public class Constants {
     public static PinpointConfig localizerConfig = new PinpointConfig(
             c -> {
                 c.name.set("pinpoint");
-                c.xPodOffset.set(2.187);
-                c.yPodOffset.set(-4.572);
+                c.xPodOffset.set(-3.896751969);
+                c.yPodOffset.set(-1.72067);
                 c.xPodDirection.set(GoBildaPinpointDriver.EncoderDirection.FORWARD);
                 c.yPodDirection.set(GoBildaPinpointDriver.EncoderDirection.FORWARD);
             }

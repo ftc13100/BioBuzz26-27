@@ -3,9 +3,9 @@ package org.firstinspires.ftc.teamcode;
 import com.pedropathing.math.Matrix;
 
 public class CVConstants {
-    public static final double CAMERA_HEIGHT = 7.1; // in from center of ball not ground to cam
-    public static final double CAMERA_PITCH = Math.toRadians(1.3); //1.3 deg down cuz the mount was very sus
-    public static final double FORWARD_OFFSET = 3; // in, acc offset is more like 5 but i want to get ball closer to bot
+    public static final double CAMERA_HEIGHT = 9.1; // in from center of ball not ground to cam
+    public static final double CAMERA_PITCH = Math.toRadians(0.0); //1.3 deg down cuz the mount was very sus
+    public static final double FORWARD_OFFSET = 7.5; // in, acc offset is more like 5 but i want to get ball closer to bot
 
     public static final Matrix xyzConverter = new Matrix(
             //xyz of cam is diff from xyz of bot
