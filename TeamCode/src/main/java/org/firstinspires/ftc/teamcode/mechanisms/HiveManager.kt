@@ -23,7 +23,7 @@ class HiveManager : Mechanism {
         .build()
 
     val turretArducam = VisionPortal.Builder()
-        .setCamera(hardwareMap.get(WebcamName::class.java, RobotHardware.CAM_TURRET.deviceName))
+        .setCamera(hardwareMap.get(WebcamName::class.java, "turretArducam"))
         .addProcessor(processor)
         .build()
 
