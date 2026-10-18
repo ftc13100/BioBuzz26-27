@@ -4,12 +4,15 @@ import com.pedropathing.algorithm.Foresight;
 import com.pedropathing.algorithm.ForesightConfig;
 import com.pedropathing.controllers.Controller;
 import com.pedropathing.follower.Follower;
+import com.pedropathing.localization.Localizer;
+import com.pedropathing.localization.MotionState;
 import com.pedropathing.math.Matrix;
+import com.pedropathing.math.Pose;
 import com.pedropathing.math.Vector2D;
+import com.pedropathing.math.Velocity;
 import com.pedropathing.revhub.drivetrains.Mecanum;
 import com.pedropathing.revhub.drivetrains.MecanumConfig;
 import com.pedropathing.revhub.localizers.OctoQuadConfig;
-import com.pedropathing.revhub.localizers.OctoQuadLocalizer;
 import com.qualcomm.hardware.digitalchickenlabs.OctoQuad;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -22,7 +25,14 @@ public class Constants {
 
     public static Follower create(HardwareMap h) {
         return new Follower(
-                new OctoQuadLocalizer(h, localizerConfig),
+                // Dummy localizer for drive-only testing without OctoQuad / Pinpoint hardware
+                new Localizer() {
+                    private Pose pose = Pose.zero();
+                    @Override public void setPose(Pose pose) { this.pose = pose; }
+                    @Override public MotionState state() { return MotionState.ofVelocity(pose, Velocity.zero()); }
+                    @Override public void update() {}
+                    @Override public void reset() {}
+                },
                 new Mecanum(h, drivetrainConfig),
                 new Foresight(foresightConfig)
         );
