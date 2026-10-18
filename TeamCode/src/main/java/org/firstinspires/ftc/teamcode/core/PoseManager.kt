@@ -47,6 +47,12 @@ object PoseManager {
         return closestPose
     }
 
+    fun getTargetPose(robotPose: Pose): Pose {
+        var targetX = 62.0
+        val targetY = if (robotPose.y() < 72.0) 56.0 else 144.0 - 56.0
+        return Pose(targetX, targetY, 0.0)
+    }
+
     fun getPoseDistance(p1: Pose, p2: Pose): Double {
         val dx = p1.x() - p2.x()
         val dy = p1.y() - p2.y()

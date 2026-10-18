@@ -12,7 +12,7 @@ class BeaverRobot : NextRobot {
     val intake = Intake()
     val shooter = Shooter()
     val turretHood = TurretHood()
-    val turret by lazy { Turret(follower, hiveManager) }
+    val turret by lazy { Turret(follower) }
 
     override val mechanisms by lazy { setOf(hiveManager, intake, shooter, turretHood, turret) }
 

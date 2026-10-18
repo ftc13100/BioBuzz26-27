@@ -80,7 +80,7 @@ class MainTeleOp(val beaverRobot: BeaverRobot) : NextOpMode(beaverRobot) {
             telemetry.addData("Loop Time", "%.2f ms".format(loopTime))
             telemetry.addData("Min Loop Time", "%.2f ms".format(minLoopTime))
             telemetry.addData("Max Loop Time", "%.2f ms".format(maxLoopTime))
-            telemetry.addData("Target Pos", beaverRobot.hiveManager.getTargetPose())
+            telemetry.addData("Target Pos", PoseManager.getTargetPose(beaverRobot.follower.pose()))
 
             telemetry.addData("Shooter", beaverRobot.shooter.targetVelocity + beaverRobot.shooter.manualOffset)
             telemetry.addData("Hood", beaverRobot.turretHood.targetPosition + beaverRobot.turretHood.manualOffset)

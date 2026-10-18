@@ -47,10 +47,4 @@ class HiveManager : Mechanism {
         if (robotPose.y() < 72) setHiveRight()
         else setHiveLeft()
     }
-
-    fun getTargetPose(): Pose {
-        var targetX = 62.0
-        val targetY = if (hiveOnRight) 56.0 else 144.0 - 56.0
-        return Pose(targetX, targetY, 0.0)
-    }
 }
