@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.mechanisms
 
 import com.pedropathing.ivy.Command
+import com.pedropathing.math.Pose
 import dev.nextftc.hardware.actuators.NextServo
 import dev.nextftc.robot.Mechanism
 import org.firstinspires.ftc.teamcode.core.RobotHardware
@@ -10,7 +11,7 @@ class TurretHood : Mechanism {
 
     var targetPosition = 0.0
     var manualOffset = 0.0
-    
+
     val ANGLE_MIN = 0.0
     val ANGLE_MAX = 0.8
 

@@ -23,4 +23,7 @@ enum class RobotHardware(val deviceName: String) {
     I2C_COLOR0("cs0"),
     I2C_COLOR1("cs1"),
     I2C_COLOR2("cs2"),
+
+    LL_TURRET("turretLimelight"),
+    LL_INTAKE("turretIntake")
 }

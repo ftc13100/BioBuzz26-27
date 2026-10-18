@@ -8,7 +8,6 @@ import dev.nextftc.hardware.sensors.NextAnalogInput
 import dev.nextftc.robot.Mechanism
 import dev.nextftc.units.radians
 import org.firstinspires.ftc.teamcode.core.RobotHardware
-import org.firstinspires.ftc.teamcode.core.PoseStorage
 import kotlin.math.abs
 
 class Spindexer : Mechanism {

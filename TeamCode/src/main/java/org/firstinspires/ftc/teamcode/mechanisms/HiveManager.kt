@@ -1,20 +1,20 @@
-package org.firstinspires.ftc.teamcode.mechanisms
-
-import com.pedropathing.ivy.Command
 import com.pedropathing.math.Pose
+import dev.nextftc.hardware.webcams.NextLimelight
 import dev.nextftc.robot.Mechanism
 
 class HiveManager : Mechanism {
-    var hiveOnRight: Boolean
-    init {
-        hiveOnRight = true
-    }
+    val turretLimelight = NextLimelight("limelight")
+    var hiveOnRight = true
 
-    fun getTargetPose(robotPose: Pose): Pose {
-        var targetX = 72.0
+    fun startPolling() = instant { turretLimelight.startReading(pipeline = 0, hz = 100) }
+
+    fun getTargetPose(): Pose {
+        var targetX = 62.0
         val targetY = if (hiveOnRight) 56.0 else 144.0 - 56.0
         return Pose(targetX, targetY, 0.0)
     }
 
-    fun flipHive(): Command = instant { hiveOnRight = !hiveOnRight }
+    fun setHiveRight() = instant { hiveOnRight = true }
+    fun setHiveLeft() = instant { hiveOnRight = false }
+    fun flipHive() = instant { hiveOnRight = !hiveOnRight }
 }
