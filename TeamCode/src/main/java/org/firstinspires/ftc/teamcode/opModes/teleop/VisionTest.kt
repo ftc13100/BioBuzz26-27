@@ -33,7 +33,7 @@ class VisionTest : LinearOpMode() {
             val matchingClusterDetections = detections.filter { detection ->
                 detection is AprilTagClusterDetection &&
                         detection.metadata?.name?.isNotEmpty() == true &&
-                        detection.metadata.name[0].toString().equals(hiveManager.targetTagFilter, ignoreCase = true)
+                        detection.metadata.name[0].equals(hiveManager.targetTagFilter, ignoreCase = true)
             }
 
             telemetry.addData("Matching Clusters Found", matchingClusterDetections.size)

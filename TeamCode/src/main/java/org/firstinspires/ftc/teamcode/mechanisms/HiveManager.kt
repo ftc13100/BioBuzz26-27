@@ -8,12 +8,13 @@ import org.firstinspires.ftc.teamcode.core.PoseManager
 import org.firstinspires.ftc.vision.VisionPortal
 import org.firstinspires.ftc.vision.apriltag.AprilTagClusterDetection
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor
+import kotlin.math.abs
 
 class HiveManager : Mechanism {
-    val HIVE_PITCH_TOLERANCE = 5
+    val HIVE_PITCH_TOLERANCE = 15
     var hiveOnRight = true
 
-    val targetTagFilter = if (PoseManager.redAlliance) "R" else "B"
+    val targetTagFilter: Char = if (PoseManager.redAlliance) 'R' else 'B'
 
     val processor = AprilTagProcessor.Builder()
         .setDrawTagID(true)
@@ -27,19 +28,25 @@ class HiveManager : Mechanism {
         .addProcessor(processor)
         .build()
 
-    fun visionUpdate() = instant {
-        val detection = processor.detections.filter { detection ->
-            detection is AprilTagClusterDetection && detection.metadata.name[0].equals(
-                targetTagFilter
-            )
-        }.get(0)
+    fun visionUpdate(robotPose: Pose) = instant {
+        val detections = processor.detections.filter { detection ->
+            detection is AprilTagClusterDetection && detection.metadata.name[0] == targetTagFilter
+        }
 
-        val relativeAngle = detection.ftcPose.pitch
+        if (detections.size == 0) {
+            setHiveOpposite(robotPose)
+        } else if (abs(detections.get(0).ftcPose.pitch) > HIVE_PITCH_TOLERANCE) {
+            setHiveOpposite(robotPose)
+        }
     }
 
     fun setHiveRight() = instant { hiveOnRight = true }
     fun setHiveLeft() = instant { hiveOnRight = false }
     fun flipHive() = instant { hiveOnRight = !hiveOnRight }
+    fun setHiveOpposite(robotPose: Pose) = instant {
+        if (robotPose.y() < 72) setHiveRight()
+        else setHiveLeft()
+    }
 
     fun getTargetPose(): Pose {
         var targetX = 62.0

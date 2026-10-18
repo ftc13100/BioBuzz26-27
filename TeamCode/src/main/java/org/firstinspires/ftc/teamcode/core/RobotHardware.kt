@@ -18,11 +18,7 @@ enum class RobotHardware(val deviceName: String) {
 
     Q_TURRET("frontRight"),
 
-    I2C_PINPOINT("pinpoint"),
-    I2C_LED("i2c2"),
-    I2C_COLOR0("cs0"),
-    I2C_COLOR1("cs1"),
-    I2C_COLOR2("cs2"),
+    I2C_OCTOQUAD("octoquad"),
 
     CAM_TURRET("turretArducam"),
     LL_INTAKE("turretIntake")

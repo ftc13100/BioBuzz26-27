@@ -117,17 +117,13 @@ class MainTeleOp(val beaverRobot: BeaverRobot) : NextOpMode(beaverRobot) {
         val driver = CommandGamepad(gamepad1)
         val operator = CommandGamepad(gamepad2)
 
-        // Driver Controls
         driver.rightBumper
             .toggleOnTrue(beaverRobot.intake.intake())
 
         driver.leftBumper
             .toggleOnTrue(beaverRobot.intake.outtake())
 
-        driver.leftTrigger.isOver(0.5)
-            .toggleOnTrue(beaverRobot.spindexer.spinShot())
-            .toggleOnFalse(beaverRobot.spindexer.stop())
-            .toggleOnFalse(beaverRobot.spindexer.toIntakePos())
+        driver.leftTrigger.isOver(0.5) // TODO: Add transfer
 
         driver.rightTrigger.isOver(0.5).and(driver.leftTrigger.isOver(0.5))
             .toggleOnTrue(instant { beaverRobot.follower.setPose(PoseManager.masterResetPose) })
@@ -137,12 +133,6 @@ class MainTeleOp(val beaverRobot: BeaverRobot) : NextOpMode(beaverRobot) {
 
         driver.y.onTrue(instant { driveScalar = 0.5 })
         driver.y.onFalse(instant {driveScalar = 1.0})
-
-        // Operator Controls
-        operator.a.toggleOnTrue(beaverRobot.spindexer.spinShotIndex())
-        operator.x.onTrue(beaverRobot.spindexer.autoIndex(0))
-        operator.y.onTrue(beaverRobot.spindexer.autoIndex(1))
-        operator.b.onTrue(beaverRobot.spindexer.autoIndex(2))
 
         operator.dpadUp.onTrue(instant { beaverRobot.shooter.manualOffset += 10 })
         operator.dpadDown.onTrue(instant { beaverRobot.shooter.manualOffset -= 10 })
