@@ -1,8 +1,7 @@
 package org.firstinspires.ftc.teamcode
 
-import HiveManager
+import org.firstinspires.ftc.teamcode.mechanisms.HiveManager
 import com.pedropathing.follower.Follower
-import com.pedropathing.math.Pose
 import dev.nextftc.hardware.RobotController
 import dev.nextftc.robot.NextRobot
 import org.firstinspires.ftc.teamcode.mechanisms.*
