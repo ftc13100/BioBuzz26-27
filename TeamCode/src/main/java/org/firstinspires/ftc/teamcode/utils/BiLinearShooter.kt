@@ -4,7 +4,6 @@ import com.pedropathing.math.Pose
 import com.pedropathing.math.Vector
 import dev.nextftc.units.radians
 import org.firstinspires.ftc.teamcode.BeaverRobot
-import org.firstinspires.ftc.teamcode.mechanisms.HiveManager
 import kotlin.math.pow
 import kotlin.math.sqrt
 
@@ -41,7 +40,7 @@ object BiLinearShooter {
      * Get shot parameters based on current field position and velocity.
      */
     fun getShot(x: Double, y: Double, velocity: Vector, hiveOnRight: Boolean): ShotParameters {
-        val x = if (HiveManager.hiveOnRight) x else -x
+        val x = if (hiveOnRight) x else -x
 
         val velocityOffset = if (velocity.magnitude() > EPSILON) {
             velocity.normalized().times(velocity.magnitude() * zoneProjectionLookahead)

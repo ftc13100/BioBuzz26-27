@@ -11,6 +11,7 @@ object PoseManager {
     val d = Dimensions
     val masterResetPose = Pose(d.robotLengthCenterBack, d.robotWidthCenter, 0.0)
     var EndPose: Pose = masterResetPose
+    var redAlliance = true
 
     val baseResetPostions = arrayOf(
         // Right Corner
