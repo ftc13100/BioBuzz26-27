@@ -13,11 +13,10 @@ import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor
 
 class HiveManager : Mechanism {
     val HIVE_PITCH_TOLERANCE = 5
-    var hiveOnRight = true
     var lastPitch = 0.0
+    var hiveOnRight = true
 
-    val targetTagFilter: Char
-        get() = if (PoseManager.redAlliance) 'R' else 'B'
+    val targetTagFilter: Char = if (PoseManager.redAlliance) 'R' else 'B'
 
     val processor: AprilTagProcessor = AprilTagProcessor.Builder()
         .setDrawTagID(true)
@@ -27,19 +26,12 @@ class HiveManager : Mechanism {
         .setLensIntrinsics(914.0, 914.0, 640.0, 400.0)
         .build()
 
-    val turretArducam: VisionPortal = try {
-        VisionPortal.Builder()
-            .setCamera(hardwareMap.get(WebcamName::class.java, "turretArducam"))
-            .addProcessor(processor)
-            .setCameraResolution(Size(1280, 800))
-            .setStreamFormat(VisionPortal.StreamFormat.MJPEG)
-            .build()
-    } catch (e: Exception) {
-        VisionPortal.Builder()
-            .setCamera(hardwareMap.get(WebcamName::class.java, "turretArducam"))
-            .addProcessor(processor)
-            .build()
-    }
+    val turretArducam: VisionPortal = VisionPortal.Builder()
+        .setCamera(hardwareMap.get(WebcamName::class.java, "turretArducam"))
+        .addProcessor(processor)
+        .setCameraResolution(Size(1280, 800))
+        .setStreamFormat(VisionPortal.StreamFormat.MJPEG)
+        .build()
 
     fun analyzeLatestFrame(): AprilTagClusterDetection? {
         val detections = processor.detections ?: emptyList()

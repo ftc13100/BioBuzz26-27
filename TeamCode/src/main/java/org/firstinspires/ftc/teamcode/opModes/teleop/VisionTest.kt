@@ -8,14 +8,13 @@ import org.firstinspires.ftc.vision.apriltag.AprilTagClusterDetection
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection
 import org.firstinspires.ftc.vision.apriltag.AprilTagSingleDetection
 
-
-@TeleOp(name = "Vision Test (AprilTag)", group = "Vision")
+@TeleOp(name = "Vision Test (AprilTag)")
 class VisionTest : LinearOpMode() {
 
     override fun runOpMode() {
         val hiveManager = HiveManager()
 
-        // Live Preview during INIT phase
+        // view during init
         while (!isStarted && !isStopRequested) {
             val initDetections = hiveManager.processor.detections ?: emptyList()
             telemetry.addData("Target Tag Filter", hiveManager.targetTagFilter)
@@ -32,11 +31,13 @@ class VisionTest : LinearOpMode() {
         var maxLoopTime = 0.0
         var minLoopTime = Double.MAX_VALUE
         var currentLoopTime = 0.0
+        var lastTelemetryTime = 0.0
 
         while (opModeIsActive()) {
             val now = System.nanoTime() / 1_000_000.0
 
             if (firstOnUpdate) {
+                lastTelemetryTime = now
                 lastLoopTime = now
                 firstOnUpdate = false
             } else {
@@ -48,41 +49,41 @@ class VisionTest : LinearOpMode() {
 
             val detections: List<AprilTagDetection> = hiveManager.processor.detections ?: emptyList()
 
-            telemetry.addData("Loop Time", "%.2f ms (Min: %.2f, Max: %.2f)".format(currentLoopTime, if (minLoopTime == Double.MAX_VALUE) 0.0 else minLoopTime, maxLoopTime))
-            telemetry.addData("Loop Hz", "%.2f".format(if (currentLoopTime > 0) 1000.0 / currentLoopTime else 0.0))
-            telemetry.addData("# Detections Found", detections.size)
-            telemetry.addData("Hive Side", if (hiveManager.hiveOnRight) "RIGHT" else "LEFT")
-            telemetry.addData("Target Tag Filter", hiveManager.targetTagFilter)
+            if (now - lastTelemetryTime > 100) {
+                lastTelemetryTime = now
 
-            val matchingClusterDetections = detections.filterIsInstance<AprilTagClusterDetection>().filter { cluster ->
-                val name = cluster.metadata?.name
-                !name.isNullOrEmpty() && name[0].equals(hiveManager.targetTagFilter, ignoreCase = true)
-            }
+                telemetry.addData("Loop Time", "%.2f ms (Min: %.2f, Max: %.2f)".format(currentLoopTime, if (minLoopTime == Double.MAX_VALUE) 0.0 else minLoopTime, maxLoopTime))
+                telemetry.addData("Loop Hz", "%.2f".format(if (currentLoopTime > 0) 1000.0 / currentLoopTime else 0.0))
+                telemetry.addData("# Detections Found", detections.size)
+                telemetry.addData("Hive Side", if (hiveManager.hiveOnRight) "RIGHT" else "LEFT")
+                telemetry.addData("Target Tag Filter", hiveManager.targetTagFilter)
 
-            telemetry.addData("Matching Clusters Found", matchingClusterDetections.size)
+                val matchingClusterDetections = detections.filterIsInstance<AprilTagClusterDetection>().filter { cluster ->
+                    val name = cluster.metadata?.name
+                    !name.isNullOrEmpty() && name[0].equals(hiveManager.targetTagFilter, ignoreCase = true)
+                }
 
-            for (detection in detections) {
-                if (detection is AprilTagClusterDetection) {
-                    val clusterName = detection.metadata?.name ?: "Unknown Cluster"
-                    telemetry.addLine("\n== Cluster Tag: $clusterName ==")
-                    detection.ftcPose?.let { pose ->
-                        telemetry.addData("  Pitch (Relative Angle)", "%.2f deg".format(pose.pitch))
-                        telemetry.addData("  XYZ", "X: %.1f, Y: %.1f, Z: %.1f".format(pose.x, pose.y, pose.z))
-                    }
-                } else if (detection is AprilTagSingleDetection) {
-                    val tagName = detection.metadata?.name ?: "Single Tag"
-                    telemetry.addLine("\n== Single Tag ID ${detection.id} ($tagName) ==")
-                    detection.ftcPose?.let { pose ->
-                        telemetry.addData("  XYZ", "X: %.1f, Y: %.1f, Z: %.1f".format(pose.x, pose.y, pose.z))
+                telemetry.addData("Matching Clusters Found", matchingClusterDetections.size)
+
+                for (detection in detections) {
+                    if (detection is AprilTagClusterDetection) {
+                        val clusterName = detection.metadata?.name ?: "Unknown Cluster"
+                        telemetry.addLine("\n== Cluster Tag: $clusterName ==")
+                        detection.ftcPose?.let { pose ->
+                            telemetry.addData("  Pitch (Relative Angle)", "%.2f deg".format(pose.pitch))
+                            telemetry.addData("  XYZ", "X: %.1f, Y: %.1f, Z: %.1f".format(pose.x, pose.y, pose.z))
+                        }
+                    } else if (detection is AprilTagSingleDetection) {
+                        val tagName = detection.metadata?.name ?: "Single Tag"
+                        telemetry.addLine("\n== Single Tag ID ${detection.id} ($tagName) ==")
+                        detection.ftcPose?.let { pose ->
+                            telemetry.addData("  XYZ", "X: %.1f, Y: %.1f, Z: %.1f".format(pose.x, pose.y, pose.z))
+                        }
                     }
                 }
+                telemetry.update()
             }
-
-            telemetry.update()
+            sleep(10)
         }
-
-        try {
-            hiveManager.turretArducam.close()
-        } catch (_: Exception) {}
     }
 }

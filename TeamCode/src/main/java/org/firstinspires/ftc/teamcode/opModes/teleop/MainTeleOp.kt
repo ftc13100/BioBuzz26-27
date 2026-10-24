@@ -85,7 +85,6 @@ class MainTeleOp(val beaverRobot: BeaverRobot) : NextOpMode(beaverRobot) {
             telemetry.addData("Shooter", beaverRobot.shooter.targetVelocity + beaverRobot.shooter.manualOffset)
             telemetry.addData("Hood", beaverRobot.turretHood.targetPosition + beaverRobot.turretHood.manualOffset)
 
-            telemetry.addData("Loop Hz", "%.2f".format(1000.0 / loopTime))
             telemetry.addLine(PoseManager.resetPoses.toString())
             telemetry.update()
 
