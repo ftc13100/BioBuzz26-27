@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode
 
-import org.firstinspires.ftc.teamcode.mechanisms.HiveManager
 import com.pedropathing.follower.Follower
 import dev.nextftc.hardware.RobotController
 import dev.nextftc.robot.NextRobot
@@ -9,11 +8,11 @@ import org.firstinspires.ftc.teamcode.pedro.Constants
 
 class BeaverRobot : NextRobot {
     val hiveManager by lazy { HiveManager() }
-    val intake = Intake()
-    val shooter = Shooter()
-    val turretHood = TurretHood()
+    val intake by lazy { Intake() }
+    val shooter by lazy { Shooter() }
+    val turretHood by lazy { TurretHood() }
     val turret by lazy { Turret(follower, hiveManager) }
-    val spindexer = Spindexer()
+    val spindexer by lazy { Spindexer() }
 
     override val mechanisms by lazy { setOf(hiveManager, intake, shooter, turretHood, turret, spindexer) }
 

@@ -1,6 +1,8 @@
 repositories {
     mavenCentral()
     maven { url 'https://repo.dairy.foundation/releases/'}
+    // UNCOMMENT PANELS UNDER
+    // maven { url = "https://mymaven.bylazar.com/releases" }
     maven { url = 'https://jitpack.io' }
     google() // Needed for androidx
 }
@@ -16,6 +18,9 @@ dependencies {
     implementation 'org.firstinspires.ftc:FtcCommon:12.0.0'
     implementation 'org.firstinspires.ftc:Vision:12.0.0'
     implementation 'androidx.appcompat:appcompat:1.2.0'
+
+    // UNCOMMENT PANELS UNDER
+    // implementation 'com.bylazar:fullpanels:1.0.9'
 
     implementation 'com.pedropathing:revhub:3.0.1'
     implementation 'com.pedropathing:tuning:1.0.3-beta.1'
