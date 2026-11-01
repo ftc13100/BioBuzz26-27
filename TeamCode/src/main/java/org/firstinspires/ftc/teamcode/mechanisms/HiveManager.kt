@@ -5,8 +5,11 @@ import com.pedropathing.ivy.Command
 import com.pedropathing.math.Pose
 import dev.nextftc.hardware.RobotController.hardwareMap
 import dev.nextftc.robot.Mechanism
+import org.firstinspires.ftc.robotcore.external.hardware.camera.CameraCompatibilityManager
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName
+import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.ExposureControl
 import org.firstinspires.ftc.teamcode.core.PoseManager
+import org.firstinspires.ftc.teamcode.core.RobotHardware
 import org.firstinspires.ftc.vision.VisionPortal
 import org.firstinspires.ftc.vision.apriltag.AprilTagClusterDetection
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor
@@ -33,8 +36,22 @@ class HiveManager : Mechanism {
     var turretArducam: VisionPortal? = null
         private set
 
+    private var exposureConfigured = false
+
+    companion object {
+        const val VENDOR_ID_ARDUCAM = 0x0C45
+        const val PRODUCT_ID_ARDUCAM_OV9281 = 0x6366
+    }
+
     fun initVision() {
         closeVision()
+        exposureConfigured = false
+
+        CameraCompatibilityManager.getInstance().addQuirk(
+            VENDOR_ID_ARDUCAM,
+            PRODUCT_ID_ARDUCAM_OV9281,
+            CameraCompatibilityManager.Quirk.AVOID_LIB_USB_RESET_DEVICE
+        )
 
         val newProcessor = AprilTagProcessor.Builder()
             .setDrawTagID(true)
@@ -45,7 +62,7 @@ class HiveManager : Mechanism {
             .build()
 
         val newPortal = VisionPortal.Builder()
-            .setCamera(hardwareMap.get(WebcamName::class.java, "turretArducam"))
+            .setCamera(hardwareMap.get(WebcamName::class.java, RobotHardware.CAM_TURRET.deviceName))
             .addProcessor(newProcessor)
             .setCameraResolution(Size(1280, 800))
             .setStreamFormat(VisionPortal.StreamFormat.MJPEG)
@@ -59,9 +76,27 @@ class HiveManager : Mechanism {
         turretArducam?.close()
         turretArducam = null
         processor = null
+        exposureConfigured = false
+    }
+
+    private fun configureExposureIfReady() {
+        if (exposureConfigured) return
+        val portal = turretArducam ?: return
+        val state = portal.cameraState
+        if (state == VisionPortal.CameraState.STREAMING || state == VisionPortal.CameraState.CAMERA_DEVICE_READY) {
+            try {
+                val exposureControl = portal.getCameraControl(ExposureControl::class.java)
+                if (exposureControl != null && exposureControl.isModeSupported(ExposureControl.Mode.ContinuousAuto)) {
+                    exposureControl.mode = ExposureControl.Mode.ContinuousAuto
+                    exposureConfigured = true
+                }
+            } catch (_: Exception) {
+            }
+        }
     }
 
     fun analyzeLatestFrame(): AprilTagClusterDetection? {
+        configureExposureIfReady()
         val activeProcessor = processor ?: return null
         val detections = activeProcessor.detections ?: emptyList()
         val clusterDetection = detections.filterIsInstance<AprilTagClusterDetection>()

@@ -104,7 +104,7 @@ class VisionTest(val beaverRobot: BeaverRobot) : NextOpMode(beaverRobot) {
             for (cluster in matchingClusters) {
                 val clusterName = cluster.metadata.name
                 telemetry.addLine("\n== MATCHING CLUSTER: $clusterName ==")
-                telemetry.addData("  Cluster Health", "%.0f%%".format(cluster.percentClusterFound))
+                telemetry.addData("  Cluster Health", "%d%%", cluster.percentClusterFound)
                 cluster.ftcPose?.let { pose ->
                     val pitch = pose.pitch
                     val roll = pose.roll
