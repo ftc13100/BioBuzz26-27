@@ -47,8 +47,8 @@ class MainTeleOp(val beaverRobot: BeaverRobot) : NextOpMode(beaverRobot) {
         if (loopTime > maxLoopTime) maxLoopTime = loopTime
         if (loopTime < minLoopTime) minLoopTime = loopTime
 
-        if (beaverRobot.follower.pose().y() > 72.0) beaverRobot.hiveManager.setHiveLeft()
-        else beaverRobot.hiveManager.setHiveRight()
+        if (beaverRobot.follower.pose().y() > 72.0) beaverRobot.hiveManager.hiveOnRight = false
+        else beaverRobot.hiveManager.hiveOnRight = true
 
         if (beaverRobot.turret.goalTrackingActive) {
             val shot = BiLinearShooter.getShot(
@@ -85,7 +85,6 @@ class MainTeleOp(val beaverRobot: BeaverRobot) : NextOpMode(beaverRobot) {
             telemetry.addData("Shooter", beaverRobot.shooter.targetVelocity + beaverRobot.shooter.manualOffset)
             telemetry.addData("Hood", beaverRobot.turretHood.targetPosition + beaverRobot.turretHood.manualOffset)
 
-            telemetry.addData("Loop Hz", "%.2f".format(1000.0 / loopTime))
             telemetry.addLine(PoseManager.resetPoses.toString())
             telemetry.update()
 
