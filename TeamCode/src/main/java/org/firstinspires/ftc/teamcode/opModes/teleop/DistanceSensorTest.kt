@@ -9,7 +9,7 @@ import org.firstinspires.ftc.teamcode.core.RobotHardware
 @TeleOp(name = "Distance Sensor Test")
 class DistanceSensorTest : LinearOpMode() {
     override fun runOpMode() {
-        val distanceIntake = hardwareMap.get(DigitalChannel::class.java, RobotHardware.DISTANCE_INTAKE.deviceName).apply {
+        val distanceIntake = hardwareMap.get(DigitalChannel::class.java, RobotHardware.DISTANCE_INTAKE_1.deviceName).apply {
             mode = DigitalChannel.Mode.INPUT
         }
 

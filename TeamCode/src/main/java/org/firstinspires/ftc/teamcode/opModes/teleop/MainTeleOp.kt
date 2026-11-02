@@ -1,7 +1,9 @@
 package org.firstinspires.ftc.teamcode.opmodes.teleop
+import android.widget.BaseExpandableListAdapter
 import com.pedropathing.drivetrain.DrivePowers
 import com.pedropathing.follower.ManualDrive
 import com.pedropathing.ivy.commands.Commands.instant
+import dev.nextftc.robot.opmode.BlazeOpMode
 import dev.nextftc.robot.opmode.NextOpMode
 import dev.nextftc.robot.opmode.NextTeleop
 import dev.nextftc.robot.triggers.CommandGamepad
@@ -21,12 +23,12 @@ private var startSystemTime = 0.toLong()
 
 @NextTeleop("MainTeleOp")
 class MainTeleOp(val beaverRobot: BeaverRobot) : NextOpMode(beaverRobot) {
-    private lateinit var logger: BeaverLogger
+    //private lateinit var logger: BeaverLogger
     private var driveScalar = 1.0
 
     override fun start() {
         beaverRobot.follower.setPose(PoseManager.EndPose)
-        logger = BeaverLogger()
+        //logger = BeaverLogger()
         buildDriverControls()
         beaverRobot.turret.trackTarget()
         startSystemTime = System.currentTimeMillis()
@@ -63,7 +65,7 @@ class MainTeleOp(val beaverRobot: BeaverRobot) : NextOpMode(beaverRobot) {
         beaverRobot.follower.manual(ManualDrive.fieldCentric(
             -gamepad1.left_stick_y.toDouble() * driveScalar,
             -gamepad1.left_stick_x.toDouble() * driveScalar,
-            gamepad1.right_stick_x.toDouble() * driveScalar,
+            -gamepad1.right_stick_x.toDouble() * driveScalar,
             beaverRobot.follower.pose().heading()
         ))
 
@@ -71,15 +73,15 @@ class MainTeleOp(val beaverRobot: BeaverRobot) : NextOpMode(beaverRobot) {
         if (now - lastTelemetryTime > TELEMETRY_INTERVAL) {
             lastTelemetryTime = now
 
-            telemetry.addData("Robot Pos", beaverRobot.follower.pose())
+            telemetry.addData("Robot Pos", "X: %.1f, Y: %.1f, H: %.1f".format(beaverRobot.follower.pose().x(),beaverRobot.follower.pose().y(), Math.toDegrees(beaverRobot.follower.pose().heading())))
             telemetry.addData("Turret Pos", "(%.1f, %.1f)".format(beaverRobot.turret.turretX, beaverRobot.turret.turretY))
 
-            telemetry.addData("Shooter RPM", beaverRobot.shooter.motor.encoderVelocity.magnitude)
-            telemetry.addData("Tracking Active", beaverRobot.turret.goalTrackingActive)
+            telemetry.addData("Shooter vel", beaverRobot.shooter.motor.encoderVelocity.magnitude)
+//            telemetry.addData("Tracking Active", beaverRobot.turret.goalTrackingActive)
 
             telemetry.addData("Loop Time", "%.2f ms".format(loopTime))
-            telemetry.addData("Min Loop Time", "%.2f ms".format(minLoopTime))
-            telemetry.addData("Max Loop Time", "%.2f ms".format(maxLoopTime))
+//            telemetry.addData("Min Loop Time", "%.2f ms".format(minLoopTime))
+//            telemetry.addData("Max Loop Time", "%.2f ms".format(maxLoopTime))
             telemetry.addData("Target Pos", beaverRobot.hiveManager.getTargetPose())
 
             telemetry.addData("Shooter", beaverRobot.shooter.targetVelocity + beaverRobot.shooter.manualOffset)
@@ -88,26 +90,26 @@ class MainTeleOp(val beaverRobot: BeaverRobot) : NextOpMode(beaverRobot) {
             telemetry.addLine(PoseManager.resetPoses.toString())
             telemetry.update()
 
-            logger.log(
-                System.currentTimeMillis() - startSystemTime,
-                beaverRobot.follower.pose().x(),
-                beaverRobot.follower.pose().y(),
-                beaverRobot.follower.pose().heading(),
-                BiLinearShooter.projectedX,
-                BiLinearShooter.projectedY,
-                beaverRobot.turret.targetAngleField,
-                beaverRobot.turret.targetAngleRobotRef,
-                beaverRobot.shooter.targetVelocity,
-                beaverRobot.shooter.motor.encoderVelocity.magnitude,
-                beaverRobot.shooter.motor.throttle
-            )
+//            logger.log(
+//                System.currentTimeMillis() - startSystemTime,
+//                beaverRobot.follower.pose().x(),
+//                beaverRobot.follower.pose().y(),
+//                beaverRobot.follower.pose().heading(),
+//                BiLinearShooter.projectedX,
+//                BiLinearShooter.projectedY,
+//                beaverRobot.turret.targetAngleField,
+//                beaverRobot.turret.targetAngleRobotRef,
+//                beaverRobot.shooter.targetVelocity,
+//                beaverRobot.shooter.motor.encoderVelocity.magnitude,
+//                beaverRobot.shooter.motor.throttle
+//            )
         }
 
     }
 
     override fun end() {
         PoseManager.EndPose = beaverRobot.follower.pose()
-        logger.close()
+        //logger.close()
         beaverRobot.turret.stopTracking()
         beaverRobot.shooter.stop().schedule()
     }

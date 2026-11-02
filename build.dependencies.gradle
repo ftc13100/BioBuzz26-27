@@ -1,9 +1,11 @@
 repositories {
     mavenCentral()
+//    maven { url = 'https://maven.brott.dev/' }
     maven { url 'https://repo.dairy.foundation/releases/'}
-    // UNCOMMENT PANELS UNDER
-    // maven { url = "https://mymaven.bylazar.com/releases" }
-    maven { url = 'https://jitpack.io' }
+//    maven { url = "https://mymaven.bylazar.com/releases" }
+//    maven { url = 'https://jitpack.io' }
+    maven { url = 'https://maven.anygeneric.dev/' }
+    maven { url = "https://central.sonatype.com/repository/maven-snapshots/"}
     google() // Needed for androidx
 }
 
@@ -19,21 +21,28 @@ dependencies {
     implementation 'org.firstinspires.ftc:Vision:12.0.0'
     implementation 'androidx.appcompat:appcompat:1.2.0'
 
-    // UNCOMMENT PANELS UNDER
-    // implementation 'com.bylazar:fullpanels:1.0.9'
+//    implementation 'com.bylazar:fullpanels:1.0.9'
 
     implementation 'com.pedropathing:revhub:3.0.2'
-    implementation 'com.pedropathing:tuning:1.0.3-beta.1'
+    implementation 'com.pedropathing:tuning:1.0.3'
+
+    implementation 'com.skeletonarmyftc.marrow:core:1.2.3'
 
     implementation 'com.pedropathing.ivy:pedro:1.1.1'
 
-    implementation 'dev.nextftc.v2:control:0.3.0'
-    implementation 'dev.nextftc.v2:hardware:0.3.0'
-    implementation 'dev.nextftc.v2:robot:0.3.0'
+    implementation 'dev.nextftc.v2:robot:0.3.1-SNAPSHOT'
 
     implementation "dev.frozenmilk.sinister:Sloth:0.3.2"
 
-    implementation 'dev.ftcautotune.FtcAutoTune:pidautotuner-core:v1.4.3'
-    implementation 'dev.ftcautotune.FtcAutoTune:pidautotuner-ftc:v1.4.3'
+//    implementation 'org.ftclib.ftclib:core:2.1.1'
+//    implementation 'dev.ftcautotune.FtcAutoTune:pidautotuner-core:v1.4.3'
+//    implementation 'dev.ftcautotune.FtcAutoTune:pidautotuner-ftc:v1.4.3'
+//
+//    implementation('com.acmerobotics.dashboard:dashboard:0.6.0') {
+//        exclude group: 'org.firstinspires.ftc'
+//    }
+
+    implementation 'dev.anygeneric:blazeftc:0.1.67'
+    implementation 'dev.anygeneric:blazeftc_pedro3:0.1.67'
 
 }

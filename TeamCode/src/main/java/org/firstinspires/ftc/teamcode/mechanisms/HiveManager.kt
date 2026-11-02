@@ -47,29 +47,36 @@ class HiveManager : Mechanism {
         closeVision()
         exposureConfigured = false
 
-        CameraCompatibilityManager.getInstance().addQuirk(
-            VENDOR_ID_ARDUCAM,
-            PRODUCT_ID_ARDUCAM_OV9281,
-            CameraCompatibilityManager.Quirk.AVOID_LIB_USB_RESET_DEVICE
-        )
+        try {
+            val webcam = hardwareMap.get(WebcamName::class.java, RobotHardware.CAM_TURRET.deviceName) ?: return
 
-        val newProcessor = AprilTagProcessor.Builder()
-            .setDrawTagID(true)
-            .setDrawTagOutline(true)
-            .setDrawAxes(true)
-            .setDrawCubeProjection(true)
-            .setLensIntrinsics(914.0, 914.0, 640.0, 400.0)
-            .build()
+            CameraCompatibilityManager.getInstance().addQuirk(
+                VENDOR_ID_ARDUCAM,
+                PRODUCT_ID_ARDUCAM_OV9281,
+                CameraCompatibilityManager.Quirk.AVOID_LIB_USB_RESET_DEVICE
+            )
 
-        val newPortal = VisionPortal.Builder()
-            .setCamera(hardwareMap.get(WebcamName::class.java, RobotHardware.CAM_TURRET.deviceName))
-            .addProcessor(newProcessor)
-            .setCameraResolution(Size(1280, 800))
-            .setStreamFormat(VisionPortal.StreamFormat.MJPEG)
-            .build()
+            val newProcessor = AprilTagProcessor.Builder()
+                .setDrawTagID(true)
+                .setDrawTagOutline(true)
+                .setDrawAxes(true)
+                .setDrawCubeProjection(true)
+                .setLensIntrinsics(914.0, 914.0, 640.0, 400.0)
+                .build()
 
-        processor = newProcessor
-        turretArducam = newPortal
+            val newPortal = VisionPortal.Builder()
+                .setCamera(webcam)
+                .addProcessor(newProcessor)
+                .setCameraResolution(Size(1280, 800))
+                .setStreamFormat(VisionPortal.StreamFormat.MJPEG)
+                .build()
+
+            processor = newProcessor
+            turretArducam = newPortal
+        } catch (_: Exception) {
+            processor = null
+            turretArducam = null
+        }
     }
 
     fun closeVision() {

@@ -26,7 +26,8 @@ public class Constants {
 
     public static Follower create(HardwareMap h) {
         return new Follower(
-                new OctoQuadLocalizer(h, localizerConfig),
+                new PinpointLocalizer(h, localizerConfig),
+                //new OctoQuadLocalizer(h, localizerConfig),
                 new Mecanum(h, drivetrainConfig),
                 new Foresight(foresightConfig)
         );
@@ -48,32 +49,33 @@ public class Constants {
     );
 
 
-    public static OctoQuadConfig localizerConfig = new OctoQuadConfig(
-            c -> {
-                c.name.set("octoquad");
-                c.xPodPort.set(0);
-                c.yPodPort.set(1);
-                c.ticksPerUnit.set(OctoQuadTuner.FOUR_BAR);
-                c.xPodOffset.set(2.187);
-                c.yPodOffset.set(-4.572);
-                c.xPodDirection.set(OctoQuad.EncoderDirection.REVERSE);
-                c.yPodDirection.set(OctoQuad.EncoderDirection.FORWARD);
-                c.globalDistanceUnit.set(DistanceUnit.INCH);
-                c.offsetUnits.set(DistanceUnit.INCH);
-                c.i2cRecoveryMode.set(OctoQuad.I2cRecoveryMode.MODE_1_PERIPH_RST_ON_FRAME_ERR);
-                c.headingScalar.set(1.0);
-            }
-    );
-
-//    public static PinpointConfig localizerConfig = new PinpointConfig(
+//    public static OctoQuadConfig localizerConfig = new OctoQuadConfig(
 //            c -> {
-//                c.name.set("pinpoint");
+//                c.name.set("octoquad");
+//                c.xPodPort.set(0);
+//                c.yPodPort.set(1);
+//                c.ticksPerUnit.set(OctoQuadTuner.FOUR_BAR);
 //                c.xPodOffset.set(2.187);
 //                c.yPodOffset.set(-4.572);
-//                c.xPodDirection.set(GoBildaPinpointDriver.EncoderDirection.FORWARD);
-//                c.yPodDirection.set(GoBildaPinpointDriver.EncoderDirection.FORWARD);
+//                c.xPodDirection.set(OctoQuad.EncoderDirection.REVERSE);
+//                c.yPodDirection.set(OctoQuad.EncoderDirection.FORWARD);
+//                c.globalDistanceUnit.set(DistanceUnit.INCH);
+//                c.offsetUnits.set(DistanceUnit.INCH);
+//                c.i2cRecoveryMode.set(OctoQuad.I2cRecoveryMode.MODE_1_PERIPH_RST_ON_FRAME_ERR);
+//                c.headingScalar.set(1.0);
 //            }
 //    );
+
+
+    public static PinpointConfig localizerConfig = new PinpointConfig(
+            c -> {
+                c.name.set("pinpoint");
+                c.xPodOffset.set(-3.896751969);
+                c.yPodOffset.set(-1.72067);
+                c.xPodDirection.set(GoBildaPinpointDriver.EncoderDirection.FORWARD);
+                c.yPodDirection.set(GoBildaPinpointDriver.EncoderDirection.FORWARD);
+            }
+    );
 
     public static ForesightConfig foresightConfig = new ForesightConfig(
             c -> {
@@ -95,4 +97,7 @@ public class Constants {
                 c.naturalStrafeDeceleration.set(104.49787535782846);
             }
     );
+
+
+
 }
