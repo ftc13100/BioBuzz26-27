@@ -62,12 +62,11 @@ class MainTeleOp(val beaverRobot: BeaverRobot) : NextOpMode(beaverRobot) {
             BiLinearShooter.applyShot(shot, beaverRobot)
         }
 
-        beaverRobot.follower.manual(ManualDrive.fieldCentric(
+        beaverRobot.follower.manual(
             -gamepad1.left_stick_y.toDouble() * driveScalar,
             -gamepad1.left_stick_x.toDouble() * driveScalar,
             -gamepad1.right_stick_x.toDouble() * driveScalar,
-            beaverRobot.follower.pose().heading()
-        ))
+        )
 
         beaverRobot.updateFollower()
         if (now - lastTelemetryTime > TELEMETRY_INTERVAL) {
