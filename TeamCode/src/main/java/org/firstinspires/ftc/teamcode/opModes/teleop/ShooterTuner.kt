@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.opmodes.teleop
 
+import com.bylazar.telemetry.PanelsTelemetry
 import com.pedropathing.ivy.commands.Commands.instant
 import dev.nextftc.robot.opmode.NextOpMode
 import dev.nextftc.robot.opmode.NextTeleop
@@ -8,6 +9,8 @@ import org.firstinspires.ftc.teamcode.BeaverRobot
 
 @NextTeleop(name = "Shooter Test & Tune")
 class ShooterTuner(val beaverRobot: BeaverRobot) : NextOpMode(beaverRobot) {
+
+    private val panelsTelemetry = PanelsTelemetry.telemetry
 
     private var targetVel = 1600.0
 
@@ -34,5 +37,11 @@ class ShooterTuner(val beaverRobot: BeaverRobot) : NextOpMode(beaverRobot) {
         telemetry.addData("Error", targetVel - currentVelocity)
         telemetry.addData("Motor Power", "%.3f".format(power))
         telemetry.update()
+
+        panelsTelemetry.addData("velocity", beaverRobot.shooter.motor.encoderVelocity)
+        panelsTelemetry.addData("target", beaverRobot.shooter.targetVelocity)
+        panelsTelemetry.addData("power", beaverRobot.shooter.motor.throttle)
+        panelsTelemetry.update(telemetry)
+
     }
 }
