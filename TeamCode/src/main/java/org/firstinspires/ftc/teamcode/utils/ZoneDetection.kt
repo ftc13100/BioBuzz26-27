@@ -6,7 +6,7 @@ import kotlin.math.sqrt
 
 data class Point(val x: Double, val y: Double)
 
-class Triangle(var pointA: Point, var pointB: Point, var pointC: Point) {
+class TriangleZone(var pointA: Point, var pointB: Point, var pointC: Point) {
     companion object {
         fun getArea(pointA: Point, pointB: Point, pointC: Point): Double {return abs((pointB.x - pointA.x) * (pointC.y - pointA.y) - (pointC.x - pointA.x) * (pointB.y - pointA.y))}
     }
@@ -72,7 +72,7 @@ class Triangle(var pointA: Point, var pointB: Point, var pointC: Point) {
     }
 }
 
-class Trapezoid(var pointA: Point, var pointB: Point, var pointC: Point, var pointD: Point) {
+class TrapezoidZone(var pointA: Point, var pointB: Point, var pointC: Point, var pointD: Point) {
     companion object {
         fun getArea(pointA: Point, pointB: Point, pointC: Point, pointD: Point): Double {
             return abs(
@@ -91,10 +91,10 @@ class Trapezoid(var pointA: Point, var pointB: Point, var pointC: Point, var poi
     fun poseInTrapezoid(pose: Pose): Boolean {
         val point = Point(pose.x(), pose.y())
 
-        val s1 = Triangle.getArea(pointA, pointB, point)
-        val s2 = Triangle.getArea(pointB, pointC, point)
-        val s3 = Triangle.getArea(pointC, pointD, point)
-        val s4 = Triangle.getArea(pointD, pointA, point)
+        val s1 = TriangleZone.getArea(pointA, pointB, point)
+        val s2 = TriangleZone.getArea(pointB, pointC, point)
+        val s3 = TriangleZone.getArea(pointC, pointD, point)
+        val s4 = TriangleZone.getArea(pointD, pointA, point)
         val totalArea = getArea()
 
         return abs(s1 + s2 + s3 + s4 - totalArea) <= 0.001
