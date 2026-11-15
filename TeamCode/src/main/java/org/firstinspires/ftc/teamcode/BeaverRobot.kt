@@ -7,7 +7,6 @@ import org.firstinspires.ftc.teamcode.mechanisms.*
 import org.firstinspires.ftc.teamcode.pedro.Constants
 
 class BeaverRobot : NextRobot {
-    val camera by lazy { TurretCamera() }
     val hiveManager by lazy { HiveManager() }
     val intake by lazy { Intake() }
     val shooter by lazy { Shooter() }
@@ -15,7 +14,7 @@ class BeaverRobot : NextRobot {
     val turret by lazy { Turret(follower, hiveManager) }
     val spindexer by lazy { Spindexer() }
 
-    override val mechanisms by lazy { setOf(camera, hiveManager, intake) }
+    override val mechanisms by lazy { setOf(hiveManager, intake) }
 
     private var _follower: Follower? = null
 
