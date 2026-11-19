@@ -7,24 +7,24 @@ import org.firstinspires.ftc.teamcode.core.RobotHardware
 import kotlin.math.abs
 
 class Intake : Mechanism {
-    val intakeMotor = NextMotor(RobotHardware.M_INTAKE.deviceName)
+    val motor = NextMotor(RobotHardware.M_INTAKE.deviceName)
 
     val isRunning: Boolean
-        get() = abs(intakeMotor.throttle) > 0.1
+        get() = abs(motor.throttle) > 0.1
 
     init {
-        intakeMotor.direction = NextMotor.Direction.REVERSE
+        motor.direction = NextMotor.Direction.REVERSE
     }
 
     fun intake(): Command = Command.build()
-        .setStart { intakeMotor.throttle = 1.0 }
-        .setEnd { _ -> intakeMotor.throttle = 0.0 }
+        .setStart { motor.throttle = 1.0 }
+        .setEnd { _ -> motor.throttle = 0.0 }
         .requiring(this)
 
     fun outtake(): Command = Command.build()
-        .setStart { intakeMotor.throttle = -1.0 }
-        .setEnd { _ -> intakeMotor.throttle = 0.0 }
+        .setStart { motor.throttle = -1.0 }
+        .setEnd { _ -> motor.throttle = 0.0 }
         .requiring(this)
 
-    fun stop(): Command = instant { intakeMotor.throttle = 0.0 }
+    fun stop(): Command = instant { motor.throttle = 0.0 }
 }

@@ -85,7 +85,7 @@ object BiLinearShooter {
      */
     fun applyShot(params: ShotParameters, robot: BeaverRobot) {
         robot.turretHood.targetPosition = params.angle + robot.turretHood.manualOffset
-        robot.turretHood.update().schedule()
-        robot.shooter.spinAtSpeed(params.velocity + robot.shooter.manualOffset).schedule()
+//        robot.turretHood.update().schedule()
+//        robot.shooter.spinAtSpeed(params.velocity + robot.shooter.manualOffset).schedule()
     }
 }

@@ -44,7 +44,6 @@ class TurretTuner(val beaverRobot: BeaverRobot) : NextOpMode(beaverRobot) {
         beaverRobot.updateFollower()
 
         val robotPose = beaverRobot.follower.pose()
-        val turretRelPos = (beaverRobot.turret.turretDigital.encoderPosition.magnitude / 12000.0) * 360.0
 
         telemetry.addData("Tracking Active", beaverRobot.turret.goalTrackingActive)
         telemetry.addData("X/Y", "(%.1f, %.1f)".format(robotPose.x(), robotPose.y()))
@@ -52,7 +51,6 @@ class TurretTuner(val beaverRobot: BeaverRobot) : NextOpMode(beaverRobot) {
         telemetry.addData("Angular Vel", beaverRobot.follower.velocity().omega)
         telemetry.addData("FF (kVF)", beaverRobot.follower.velocity().omega * beaverRobot.turret.kVF)
         telemetry.addData("Target Angle (Robot Ref)", beaverRobot.turret.targetAngleRobotRef)
-        telemetry.addData("Encoder Pos", "%.1f".format(turretRelPos))
         telemetry.update()
     }
 }

@@ -1,3 +1,4 @@
+//TODO: Use PWM control
 package org.firstinspires.ftc.teamcode.mechanisms
 
 import com.pedropathing.follower.Follower
@@ -12,9 +13,7 @@ import kotlin.math.cos
 import kotlin.math.sin
 
 class Turret(val follower: Follower, val hiveManager: HiveManager) : Mechanism {
-    val turret1 = NextServo(RobotHardware.S_TURRET1.deviceName)
-    val turret2 = NextServo(RobotHardware.S_TURRET2.deviceName)
-    val turretDigital = NextMotor(RobotHardware.Q_TURRET.deviceName)
+    val servo = NextServo(RobotHardware.S_TURRET.deviceName)
 
     val LIMIT_LOW = 22.2
     val LIMIT_HIGH = 337.8
@@ -64,13 +63,6 @@ class Turret(val follower: Follower, val hiveManager: HiveManager) : Mechanism {
 
         val targetAngleAV = targetAngleField + turretRobotAdj + (angularVel * kVF)
         toAngle(targetAngleAV + manualOffsetAngle)
-        
-        val turretRelativePos = (turretDigital.encoderPosition.magnitude / 12000.0) * 360.0
-        if (abs(turretRelativePos - targetAngleRobotRef) < 2.0) {
-            targetReached = true
-        } else {
-            targetReached = false
-        }
     }
 
     fun toAngle(angle: Double) {
@@ -80,8 +72,7 @@ class Turret(val follower: Follower, val hiveManager: HiveManager) : Mechanism {
         val clampedAngle = targetAngleRobotRef.coerceIn(LIMIT_LOW, LIMIT_HIGH)
         targetServoPosition = (clampedAngle - LIMIT_LOW) / (LIMIT_HIGH - LIMIT_LOW)
         
-        turret1.position = targetServoPosition
-        turret2.position = targetServoPosition
+        servo.position = targetServoPosition
     }
 
     fun trackTarget() { goalTrackingActive = true }

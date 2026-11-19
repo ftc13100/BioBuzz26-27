@@ -7,7 +7,7 @@ import dev.nextftc.robot.Mechanism
 import org.firstinspires.ftc.teamcode.core.RobotHardware
 
 class TurretHood : Mechanism {
-    val servo = NextServo(RobotHardware.S_TURRET_HOOD.deviceName)
+    val servo = NextServo(RobotHardware.S_HOOD.deviceName)
 
     var targetPosition = 0.0
     var manualOffset = 0.0

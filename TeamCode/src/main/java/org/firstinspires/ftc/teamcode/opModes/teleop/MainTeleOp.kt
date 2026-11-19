@@ -1,11 +1,10 @@
 package org.firstinspires.ftc.teamcode.opmodes.teleop
-import com.pedropathing.drivetrain.DrivePowers
-import com.pedropathing.follower.ManualDrive
+import com.pedropathing.ivy.*
 import com.pedropathing.ivy.commands.Commands.instant
+import com.pedropathing.ivy.groups.Groups.parallel
 import dev.nextftc.robot.opmode.NextOpMode
 import dev.nextftc.robot.opmode.NextTeleop
 import dev.nextftc.robot.triggers.CommandGamepad
-import dev.nextftc.units.radians
 import org.firstinspires.ftc.teamcode.BeaverRobot
 import org.firstinspires.ftc.teamcode.utils.BiLinearShooter
 import org.firstinspires.ftc.teamcode.utils.BeaverLogger
@@ -28,7 +27,10 @@ class MainTeleOp(val beaverRobot: BeaverRobot) : NextOpMode(beaverRobot) {
         beaverRobot.follower.setPose(PoseManager.EndPose)
         logger = BeaverLogger()
         buildDriverControls()
-        beaverRobot.turret.trackTarget()
+        beaverRobot.turret.stopTracking()
+        beaverRobot.turret.toAngle(180.0)
+        beaverRobot.ramp.lift()
+        beaverRobot.shooter.start().schedule()
         startSystemTime = System.currentTimeMillis()
     }
 
@@ -60,30 +62,23 @@ class MainTeleOp(val beaverRobot: BeaverRobot) : NextOpMode(beaverRobot) {
             BiLinearShooter.applyShot(shot, beaverRobot)
         }
 
-        beaverRobot.follower.manual(ManualDrive.fieldCentric(
-            -gamepad1.left_stick_y.toDouble() * driveScalar,
-            -gamepad1.left_stick_x.toDouble() * driveScalar,
-            gamepad1.right_stick_x.toDouble() * driveScalar,
-            beaverRobot.follower.pose().heading()
-        ))
-
         beaverRobot.updateFollower()
         if (now - lastTelemetryTime > TELEMETRY_INTERVAL) {
             lastTelemetryTime = now
 
-            telemetry.addData("Robot Pos", beaverRobot.follower.pose())
-            telemetry.addData("Turret Pos", "(%.1f, %.1f)".format(beaverRobot.turret.turretX, beaverRobot.turret.turretY))
+//            telemetry.addData("Robot Pos", beaverRobot.follower.pose())
+//            telemetry.addData("Turret Pos", "(%.1f, %.1f)".format(beaverRobot.turret.turretX, beaverRobot.turret.turretY))
 
-            telemetry.addData("Shooter RPM", beaverRobot.shooter.motor.encoderVelocity.magnitude)
-            telemetry.addData("Tracking Active", beaverRobot.turret.goalTrackingActive)
+//            telemetry.addData("Shooter RPM", beaverRobot.shooter.motor.encoderVelocity.magnitude)
+//            telemetry.addData("Tracking Active", beaverRobot.turret.goalTrackingActive)
 
             telemetry.addData("Loop Time", "%.2f ms".format(loopTime))
             telemetry.addData("Min Loop Time", "%.2f ms".format(minLoopTime))
             telemetry.addData("Max Loop Time", "%.2f ms".format(maxLoopTime))
-            telemetry.addData("Target Pos", beaverRobot.hiveManager.getTargetPose())
+//            telemetry.addData("Target Pos", beaverRobot.hiveManager.getTargetPose())
 
-            telemetry.addData("Shooter", beaverRobot.shooter.targetVelocity + beaverRobot.shooter.manualOffset)
-            telemetry.addData("Hood", beaverRobot.turretHood.targetPosition + beaverRobot.turretHood.manualOffset)
+//            telemetry.addData("Shooter", beaverRobot.shooter.targetVelocity + beaverRobot.shooter.manualOffset)
+//            telemetry.addData("Hood", beaverRobot.turretHood.targetPosition + beaverRobot.turretHood.manualOffset)
 
             telemetry.addLine(PoseManager.resetPoses.toString())
             telemetry.update()
@@ -97,7 +92,8 @@ class MainTeleOp(val beaverRobot: BeaverRobot) : NextOpMode(beaverRobot) {
                 BiLinearShooter.projectedY,
                 beaverRobot.turret.targetAngleField,
                 beaverRobot.turret.targetAngleRobotRef,
-                beaverRobot.shooter.targetVelocity,
+//                beaverRobot.shooter.targetVelocity,
+                0.0,
                 beaverRobot.shooter.motor.encoderVelocity.magnitude,
                 beaverRobot.shooter.motor.throttle
             )
@@ -109,7 +105,7 @@ class MainTeleOp(val beaverRobot: BeaverRobot) : NextOpMode(beaverRobot) {
         PoseManager.EndPose = beaverRobot.follower.pose()
         logger.close()
         beaverRobot.turret.stopTracking()
-        beaverRobot.shooter.stop().schedule()
+//        beaverRobot.shooter.stop().schedule()
     }
 
     fun buildDriverControls() {
@@ -117,35 +113,34 @@ class MainTeleOp(val beaverRobot: BeaverRobot) : NextOpMode(beaverRobot) {
         val operator = CommandGamepad(gamepad2)
 
         // Driver Controls
-        driver.rightBumper
-            .toggleOnTrue(beaverRobot.intake.intake())
+        beaverRobot.drivetrain.startDrive(gamepad1)
+
+        driver.rightBumper.toggleOnTrue(parallel(
+                beaverRobot.intake.intake(),
+                beaverRobot.transfer.intake()
+            )
+        )
 
         driver.leftBumper
             .toggleOnTrue(beaverRobot.intake.outtake())
 
-        driver.leftTrigger.isOver(0.5)
-            .toggleOnTrue(beaverRobot.spindexer.spinShot())
-            .toggleOnFalse(beaverRobot.spindexer.stop())
-            .toggleOnFalse(beaverRobot.spindexer.toIntakePos())
+        driver.a.onTrue(instant { beaverRobot.follower.setPose(PoseManager.masterResetPose) })
 
-        driver.rightTrigger.isOver(0.5).and(driver.leftTrigger.isOver(0.5))
-            .toggleOnTrue(instant { beaverRobot.follower.setPose(PoseManager.masterResetPose) })
-
-        driver.rightTrigger.isOver(0.5).and(driver.leftTrigger.isUnder(0.5))
+        driver.rightTrigger.isOver(0.5)
             .toggleOnTrue(instant { beaverRobot.follower.setPose(PoseManager.getResetPose(beaverRobot.follower.pose())) })
+
+        driver.leftTrigger.isOver(0.5)
+            .toggleOnTrue(beaverRobot.transfer.shoot())
+
+        driver.a.toggleOnTrue(instant { beaverRobot.ramp.switchPosition() })
 
         driver.y.onTrue(instant { driveScalar = 0.5 })
         driver.y.onFalse(instant {driveScalar = 1.0})
 
         // Operator Controls
-        operator.a.toggleOnTrue(beaverRobot.spindexer.spinShotIndex())
-        operator.x.onTrue(beaverRobot.spindexer.autoIndex(0))
-        operator.y.onTrue(beaverRobot.spindexer.autoIndex(1))
-        operator.b.onTrue(beaverRobot.spindexer.autoIndex(2))
-
-        operator.dpadUp.onTrue(instant { beaverRobot.shooter.manualOffset += 10 })
-        operator.dpadDown.onTrue(instant { beaverRobot.shooter.manualOffset -= 10 })
-        operator.dpadRight.onTrue(instant { beaverRobot.turretHood.manualOffset += .05 })
-        operator.dpadLeft.onTrue(instant { beaverRobot.turretHood.manualOffset -= .05 })
+//        operator.dpadUp.onTrue(instant { beaverRobot.shooter.manualOffset += 10 })
+//        operator.dpadDown.onTrue(instant { beaverRobot.shooter.manualOffset -= 10 })
+//        operator.dpadRight.onTrue(instant { beaverRobot.turretHood.manualOffset += .05 })
+//        operator.dpadLeft.onTrue(instant { beaverRobot.turretHood.manualOffset -= .05 })
     }
 }
