@@ -17,11 +17,6 @@ class Transfer : Mechanism {
         motor.direction = NextMotor.Direction.REVERSE
     }
 
-    fun intake(): Command = Command.build()
-        .setStart { motor.throttle = 0.6 }
-        .setEnd { _ -> motor.throttle = 0.0 }
-        .requiring(this)
-
     fun outtake(): Command = Command.build()
         .setStart { motor.throttle = -1.0 }
         .setEnd { _ -> motor.throttle = 0.0 }

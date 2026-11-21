@@ -34,15 +34,6 @@ class TurretTuner(val beaverRobot: BeaverRobot) : NextOpMode(beaverRobot) {
     }
 
     override fun periodic() {
-        ManualDrive.driveOrHold(
-            beaverRobot.follower,
-            -gamepad1.left_stick_y.toDouble(),
-            -gamepad1.left_stick_x.toDouble(),
-            -gamepad1.right_stick_x.toDouble()
-        )
-
-        beaverRobot.updateFollower()
-
         val robotPose = beaverRobot.follower.pose()
 
         telemetry.addData("Tracking Active", beaverRobot.turret.goalTrackingActive)

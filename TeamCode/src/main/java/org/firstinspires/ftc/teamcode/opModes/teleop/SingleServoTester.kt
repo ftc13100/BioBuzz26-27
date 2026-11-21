@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.hardware.Servo
 class SingleServoTest : LinearOpMode() {
 
     override fun runOpMode() {
-        val servoNames = listOf("ramp", "turret")
+        val servoNames = listOf("ramp", "turret", "gate", "hood")
         var selectedIndex = 0
 
         var lastUp = false

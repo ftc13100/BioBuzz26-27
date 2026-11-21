@@ -7,6 +7,7 @@ import org.firstinspires.ftc.teamcode.mechanisms.*
 import org.firstinspires.ftc.teamcode.pedro.Constants
 
 class BeaverRobot : NextRobot {
+    val octoquadReader by lazy { OctoquadReader() }
     val drivetrain by lazy { Drivetrain() }
     val hiveManager by lazy { HiveManager() }
     val intake by lazy { Intake() }
@@ -14,10 +15,10 @@ class BeaverRobot : NextRobot {
     val shooter by lazy { Shooter() }
     val turret by lazy { Turret(follower, hiveManager) }
     val turretHood by lazy { TurretHood() }
-    //    val gate by lazy { Gate() }
+    val gate by lazy { Gate() }
     val ramp by lazy { Ramp() }
 
-    override val mechanisms by lazy { setOf(drivetrain, hiveManager, intake, transfer, shooter, turret, turretHood, ramp) }
+    override val mechanisms by lazy { setOf(drivetrain, hiveManager, intake, transfer, shooter, turret, turretHood, gate, ramp) }
 
     private var _follower: Follower? = null
 

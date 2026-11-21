@@ -12,8 +12,8 @@ class TurretHood : Mechanism {
     var targetPosition = 0.0
     var manualOffset = 0.0
 
-    val ANGLE_MIN = 0.0
-    val ANGLE_MAX = 0.8
+    val ANGLE_MIN = 0.5
+    val ANGLE_MAX = 0.1
 
     fun update(): Command = instant {
         servo.position = (targetPosition + manualOffset).coerceIn(ANGLE_MIN, ANGLE_MAX)

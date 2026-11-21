@@ -14,7 +14,6 @@ import kotlin.math.sin
 
 class Turret(val follower: Follower, val hiveManager: HiveManager) : Mechanism {
     val servo = NextServo(RobotHardware.S_TURRET.deviceName)
-
     val LIMIT_LOW = 22.2
     val LIMIT_HIGH = 337.8
 
@@ -25,12 +24,16 @@ class Turret(val follower: Follower, val hiveManager: HiveManager) : Mechanism {
 
     @JvmField var goalTrackingActive = false
     @JvmField var kVF = -6.0
-    @JvmField var TURRET_OFFSET = -2.03852
+    @JvmField var TURRET_OFFSET = 0
     @JvmField var manualOffsetAngle: Double = 0.0
 
     var turretX = 0.0
     var turretY = 0.0
     var targetReached = false
+
+    init {
+        servo.setPwmRange(500.0, 2500.0)
+    }
 
     override fun periodic() {
         if (!goalTrackingActive) return
