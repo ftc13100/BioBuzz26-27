@@ -51,7 +51,7 @@ public class Constants {
     public static OctoQuadConfig localizerConfig = new OctoQuadConfig(
             c -> {
                 c.name.set("octoquad");
-                c.xPodPort.set(0);
+                c.xPodPort.set(2);
                 c.yPodPort.set(1);
                 c.ticksPerUnit.set(OctoQuadTuner.FOUR_BAR);
                 c.xPodOffset.set(2.187);
