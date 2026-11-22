@@ -87,17 +87,13 @@ class MainTeleOp(val beaverRobot: BeaverRobot) : NextOpMode(beaverRobot) {
             telemetry.update()
 
             logger.log(
-                System.currentTimeMillis() - startSystemTime,
-                beaverRobot.follower.pose().x(),
-                beaverRobot.follower.pose().y(),
-                beaverRobot.follower.pose().heading(),
-                BiLinearShooter.projectedX,
-                BiLinearShooter.projectedY,
-                beaverRobot.turret.targetAngleField,
-                beaverRobot.turret.targetAngleRobotRef,
-                beaverRobot.shooter.targetVelocity,
-                beaverRobot.shooter.motor.encoderVelocity.magnitude,
-                beaverRobot.shooter.motor.throttle
+                "time" to System.currentTimeMillis() - startSystemTime,
+                "posX" to beaverRobot.follower.pose().x(),
+                "posY" to beaverRobot.follower.pose().y(),
+                "heading" to beaverRobot.follower.pose().heading(),
+                "shooterTarget" to beaverRobot.shooter.targetVelocity,
+                "shooterActual" to beaverRobot.shooter.motor.encoderVelocity.magnitude,
+                "shooterThrottle" to beaverRobot.shooter.motor.throttle
             )
         }
 
