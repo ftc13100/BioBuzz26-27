@@ -9,7 +9,7 @@ import org.firstinspires.ftc.teamcode.BeaverRobot
 @NextTeleop(name = "Shooter Test & Tune")
 class ShooterTuner(val beaverRobot: BeaverRobot) : NextOpMode(beaverRobot) {
 
-    private var targetVel = 1600.02
+    private var targetVel = 1600.0
 
     override fun start() {
         val driver = CommandGamepad(gamepad1)
