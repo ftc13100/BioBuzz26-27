@@ -14,6 +14,11 @@ enum class RobotHardware(val deviceName: String) {
     S_GATE("gate"),
     S_RAMP("ramp"),
 
+    D_BEAM_BREAK_1("beam1"),
+    D_BEAM_BREAK_2("beam2"),
+    D_BEAM_BREAK_3("beam3"),
+    D_BEAM_BREAK_4("beam4"),
+
     I2C_OCTOQUAD("octoquad"),
 
     CAM_TURRET("arducam"),

@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.opmodes.teleop
 import com.pedropathing.ivy.*
 import com.pedropathing.ivy.commands.Commands.instant
 import com.pedropathing.ivy.groups.Groups.parallel
+import com.qualcomm.robotcore.hardware.Gamepad
 import dev.nextftc.robot.opmode.NextOpMode
 import dev.nextftc.robot.opmode.NextTeleop
 import dev.nextftc.robot.triggers.CommandGamepad
@@ -71,8 +72,8 @@ class MainTeleOp(val beaverRobot: BeaverRobot) : NextOpMode(beaverRobot) {
         if (now - lastTelemetryTime > TELEMETRY_INTERVAL) {
             lastTelemetryTime = now
 
-//            telemetry.addData("Robot Pos", beaverRobot.follower.pose())
-//            telemetry.addData("Turret Pos", "(%.1f, %.1f)".format(beaverRobot.turret.turretX, beaverRobot.turret.turretY))
+            telemetry.addData("Robot Pos", beaverRobot.follower.pose())
+            telemetry.addData("Turret Pos", "(%.1f, %.1f)".format(beaverRobot.turret.turretX, beaverRobot.turret.turretY))
 
             telemetry.addData("Shooter RPM", beaverRobot.octoquadReader.getVelocity(OctoquadPorts.Q_SHOOTER.channel))
             telemetry.addData("Tracking Active", beaverRobot.turret.goalTrackingActive)
@@ -89,17 +90,13 @@ class MainTeleOp(val beaverRobot: BeaverRobot) : NextOpMode(beaverRobot) {
             telemetry.update()
 
             logger.log(
-                System.currentTimeMillis() - startSystemTime,
-                beaverRobot.follower.pose().x(),
-                beaverRobot.follower.pose().y(),
-                beaverRobot.follower.pose().heading(),
-                BiLinearShooter.projectedX,
-                BiLinearShooter.projectedY,
-                beaverRobot.turret.targetAngleField,
-                beaverRobot.turret.targetAngleRobotRef,
-                beaverRobot.shooter.targetVelocity,
-                beaverRobot.shooter.motor.encoderVelocity.magnitude,
-                beaverRobot.shooter.motor.throttle
+                "time" to System.currentTimeMillis() - startSystemTime,
+                "posX" to beaverRobot.follower.pose().x(),
+                "posY" to beaverRobot.follower.pose().y(),
+                "heading" to beaverRobot.follower.pose().heading(),
+                "shooterTarget" to beaverRobot.shooter.targetVelocity,
+                "shooterActual" to beaverRobot.shooter.motor.encoderVelocity.magnitude,
+                "shooterThrottle" to beaverRobot.shooter.motor.throttle
             )
         }
 
@@ -117,7 +114,7 @@ class MainTeleOp(val beaverRobot: BeaverRobot) : NextOpMode(beaverRobot) {
         val operator = CommandGamepad(gamepad2)
 
         // Driver Controls
-        beaverRobot.drivetrain.startDrive(gamepad1)
+        beaverRobot.drivetrain.startDrivetrain(gamepad1)
 
         driver.rightBumper.toggleOnTrue(parallel(
             beaverRobot.intake.intake(),

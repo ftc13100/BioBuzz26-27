@@ -1,4 +1,3 @@
-//TODO: Use PWM control
 package org.firstinspires.ftc.teamcode.mechanisms
 
 import com.pedropathing.follower.Follower
