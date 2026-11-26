@@ -22,7 +22,6 @@ class MotorTestTeleOp(val beaverRobot: BeaverRobot) : NextOpMode(beaverRobot) {
     override fun start() {
         val driver = CommandGamepad(gamepad1)
 
-        // Speed adjustment controls
         driver.dpadUp.onTrue(instant { shooterSpeed = (shooterSpeed + 0.05).coerceIn(0.0, 1.0) })
         driver.dpadDown.onTrue(instant { shooterSpeed = (shooterSpeed - 0.05).coerceIn(0.0, 1.0) })
 
@@ -32,7 +31,6 @@ class MotorTestTeleOp(val beaverRobot: BeaverRobot) : NextOpMode(beaverRobot) {
         driver.y.onTrue(instant { intakeSpeed = (intakeSpeed + 0.05).coerceIn(0.0, 1.0) })
         driver.a.onTrue(instant { intakeSpeed = (intakeSpeed - 0.05).coerceIn(0.0, 1.0) })
 
-        // Intake Toggles
         driver.rightBumper.onTrue(instant {
             intakeActive = !intakeActive
             intakeReverse = false
@@ -42,7 +40,6 @@ class MotorTestTeleOp(val beaverRobot: BeaverRobot) : NextOpMode(beaverRobot) {
             intakeActive = false
         })
 
-        // Emergency Stop All
         driver.b.onTrue(instant {
             shooterSpeed = 0.0
             transferSpeed = 0.0
@@ -52,7 +49,6 @@ class MotorTestTeleOp(val beaverRobot: BeaverRobot) : NextOpMode(beaverRobot) {
     }
 
     override fun periodic() {
-        // Drivetrain Manual Driving
         ManualDrive.driveOrHold(
             beaverRobot.follower,
             -gamepad1.left_stick_y.toDouble(),
