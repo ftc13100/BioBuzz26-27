@@ -9,7 +9,7 @@ class OctoquadReader : Mechanism {
     val octoquad = hardwareMap.get(OctoQuad::class.java, RobotHardware.I2C_OCTOQUAD.deviceName)
     var data = OctoQuad.EncoderDataBlock()
 
-    var velocitySampleIntervalMs = 50
+    var velocitySampleIntervalMs = 20
 
     init {
         try {

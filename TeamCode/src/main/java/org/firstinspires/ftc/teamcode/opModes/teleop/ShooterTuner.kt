@@ -3,13 +3,13 @@ package org.firstinspires.ftc.teamcode.opmodes.teleop
 import com.bylazar.configurables.PanelsConfigurables
 import com.bylazar.configurables.annotations.Configurable
 import com.bylazar.telemetry.PanelsTelemetry
+import com.pedropathing.ivy.commands.Commands.instant
 import com.pedropathing.ivy.groups.Groups.parallel
 import dev.nextftc.robot.opmode.NextOpMode
 import dev.nextftc.robot.opmode.NextTeleop
 import dev.nextftc.robot.triggers.CommandGamepad
 import org.firstinspires.ftc.teamcode.BeaverRobot
 import org.firstinspires.ftc.teamcode.core.OctoquadPorts
-import org.firstinspires.ftc.teamcode.mechanisms.OctoquadReader
 import org.firstinspires.ftc.teamcode.mechanisms.Shooter
 import kotlin.math.abs
 
@@ -38,6 +38,9 @@ class ShooterTuner(val beaverRobot: BeaverRobot) : NextOpMode(beaverRobot) {
         driver.b.onTrue(beaverRobot.shooter.stop())
         driver.dpadUp.onTrue(beaverRobot.gate.close())
         driver.dpadDown.onTrue(beaverRobot.gate.open())
+
+        // Toggle Voltage Compensation on/off
+        driver.y.onTrue(instant { Shooter.useVoltageComp = !Shooter.useVoltageComp })
 
         // Toggle Intake
         driver.rightBumper.toggleOnTrue(beaverRobot.intake.intake())
@@ -73,6 +76,7 @@ class ShooterTuner(val beaverRobot: BeaverRobot) : NextOpMode(beaverRobot) {
         val power = beaverRobot.shooter.motor.throttle
         val error = targetVel - currentVelocity
 
+        telemetry.addData("Voltage Comp Enabled", Shooter.useVoltageComp)
         telemetry.addData("Loop Time", "%.2f ms".format(loopTime))
         telemetry.addData("Min Loop Time", "%.2f ms".format(minLoopTime))
         telemetry.addData("Max Loop Time", "%.2f ms".format(maxLoopTime))
@@ -82,6 +86,8 @@ class ShooterTuner(val beaverRobot: BeaverRobot) : NextOpMode(beaverRobot) {
         panelsTelemetry.addData("currentVelocity", currentVelocity)
         panelsTelemetry.addData("error", error)
         panelsTelemetry.addData("power", power)
+        panelsTelemetry.addData("voltageCompEnabled", Shooter.useVoltageComp)
+        panelsTelemetry.addData("loopTime", loopTime)
         panelsTelemetry.update(telemetry)
     }
 }
