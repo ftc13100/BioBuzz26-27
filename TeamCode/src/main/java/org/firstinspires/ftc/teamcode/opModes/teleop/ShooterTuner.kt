@@ -16,7 +16,6 @@ import kotlin.math.abs
 @Configurable
 @NextTeleop(name = "Shooter Test & Tune")
 class ShooterTuner(val beaverRobot: BeaverRobot) : NextOpMode(beaverRobot) {
-
     private val panelsTelemetry = PanelsTelemetry.telemetry
 
     companion object {
