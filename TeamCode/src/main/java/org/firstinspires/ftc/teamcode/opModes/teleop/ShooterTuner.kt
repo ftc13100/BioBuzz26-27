@@ -73,13 +73,6 @@ class ShooterTuner(val beaverRobot: BeaverRobot) : NextOpMode(beaverRobot) {
         val power = beaverRobot.shooter.motor.throttle
         val error = targetVel - currentVelocity
 
-        telemetry.addData("Target Velocity", targetVel)
-        telemetry.addData("Current Velocity", currentVelocity)
-        telemetry.addData("Error", error)
-        telemetry.addData("Motor Power", "%.3f".format(power))
-        telemetry.addData("kP", Shooter.kP)
-        telemetry.addData("kS", Shooter.kS)
-        telemetry.addData("kV", Shooter.kV)
         telemetry.addData("Loop Time", "%.2f ms".format(loopTime))
         telemetry.addData("Min Loop Time", "%.2f ms".format(minLoopTime))
         telemetry.addData("Max Loop Time", "%.2f ms".format(maxLoopTime))
@@ -89,7 +82,6 @@ class ShooterTuner(val beaverRobot: BeaverRobot) : NextOpMode(beaverRobot) {
         panelsTelemetry.addData("currentVelocity", currentVelocity)
         panelsTelemetry.addData("error", error)
         panelsTelemetry.addData("power", power)
-        panelsTelemetry.addData("loopTime", loopTime)
         panelsTelemetry.update(telemetry)
     }
 }

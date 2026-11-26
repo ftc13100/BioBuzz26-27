@@ -3,12 +3,13 @@ package org.firstinspires.ftc.teamcode.mechanisms
 import com.bylazar.configurables.annotations.Configurable
 import com.pedropathing.ivy.Command
 import com.qualcomm.robotcore.util.ElapsedTime
+import dev.nextftc.hardware.RobotController
 import dev.nextftc.hardware.actuators.NextMotor
 import dev.nextftc.robot.Mechanism
-import dev.nextftc.units.radiansPerSecond
 import org.firstinspires.ftc.teamcode.core.OctoquadPorts
 import org.firstinspires.ftc.teamcode.core.RobotHardware
 import kotlin.math.abs
+import kotlin.math.max
 
 @Configurable
 class Shooter(val octoquadReader: OctoquadReader = OctoquadReader()) : Mechanism {
@@ -20,8 +21,11 @@ class Shooter(val octoquadReader: OctoquadReader = OctoquadReader()) : Mechanism
         @JvmField var manualOffset = 0.0
 
         @JvmField var kP = -0.00002
+        @JvmField var kD = 0.000
         @JvmField var kS = 0.24
         @JvmField var kV = 0.00065
+        @JvmField var kA = 0.000
+        @JvmField var nominalVoltage = 12.0
     }
 
     var targetVelocity: Double
@@ -36,6 +40,10 @@ class Shooter(val octoquadReader: OctoquadReader = OctoquadReader()) : Mechanism
         get() = Shooter.kP
         set(value) { Shooter.kP = value }
 
+    var kD: Double
+        get() = Shooter.kD
+        set(value) { Shooter.kD = value }
+
     var kS: Double
         get() = Shooter.kS
         set(value) { Shooter.kS = value }
@@ -44,9 +52,36 @@ class Shooter(val octoquadReader: OctoquadReader = OctoquadReader()) : Mechanism
         get() = Shooter.kV
         set(value) { Shooter.kV = value }
 
+    var kA: Double
+        get() = Shooter.kA
+        set(value) { Shooter.kA = value }
+
     var active = false
     var ready = false
     private val timer = ElapsedTime()
+
+    private var cachedVoltage = 12.0
+    private var lastVoltageReadMs = 0L
+
+    val currentVoltage: Double
+        get() {
+            val now = System.currentTimeMillis()
+            if (now - lastVoltageReadMs >= 250L || lastVoltageReadMs == 0L) {
+                try {
+                    val measured = RobotController.hardwareMap.voltageSensor.firstOrNull()?.voltage ?: 12.0
+                    if (measured > 6.0) {
+                        cachedVoltage = measured
+                    }
+                } catch (e: Exception) {
+                    cachedVoltage = nominalVoltage
+                }
+                lastVoltageReadMs = now
+            }
+            return cachedVoltage
+        }
+
+    val voltageCompMultiplier: Double
+        get() = nominalVoltage / max(6.0, currentVoltage)
 
     init {
         motor.direction = NextMotor.Direction.REVERSE
@@ -54,24 +89,16 @@ class Shooter(val octoquadReader: OctoquadReader = OctoquadReader()) : Mechanism
     }
 
     override fun periodic() {
-
-        motor.velocityConstants.apply {
-            this.kP = Shooter.kP
-            this.kS = Shooter.kS
-            this.kV = Shooter.kV
-        }
-
-        if (active) {
+        if (active && targetVelocity > 0) {
             val currentVel = abs(octoquadReader.getVelocity(OctoquadPorts.Q_SHOOTER.channel).toDouble())
             val error = targetVelocity - currentVel
 
-            //if (error > 500.0) {
-            //    motor.throttle = 1.0
-            //} else if (error < -500.0) {
-            //    motor.throttle = 0.0
-            //} else {
-                motor.setVelocitySetpoint(targetVelocity.radiansPerSecond)
-            //}
+            val ff = Shooter.kS + (Shooter.kV * targetVelocity)
+            val p = Shooter.kP * error
+            val rawPower = ff + p
+
+            val compensatedPower = rawPower * voltageCompMultiplier
+            motor.throttle = compensatedPower.coerceIn(0.0, 1.0)
 
             if (abs(error) < 21.0 && !ready) {
                 ready = true
