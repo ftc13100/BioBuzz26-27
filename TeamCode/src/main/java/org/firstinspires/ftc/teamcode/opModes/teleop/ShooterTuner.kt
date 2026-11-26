@@ -38,13 +38,10 @@ class ShooterTuner(val beaverRobot: BeaverRobot) : NextOpMode(beaverRobot) {
         driver.dpadUp.onTrue(beaverRobot.gate.close())
         driver.dpadDown.onTrue(beaverRobot.gate.open())
 
-        // Toggle Voltage Compensation on/off
         driver.y.onTrue(instant { Shooter.useVoltageComp = !Shooter.useVoltageComp })
 
-        // Toggle Intake
         driver.rightBumper.toggleOnTrue(beaverRobot.intake.intake())
 
-        // Toggle Shoot Feeder (Intake + Transfer)
         driver.x.toggleOnTrue(
             parallel(
                 beaverRobot.intake.intake(),
