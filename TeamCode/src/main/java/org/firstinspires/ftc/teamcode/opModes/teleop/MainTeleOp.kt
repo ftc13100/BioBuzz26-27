@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.opmodes.teleop
 import com.pedropathing.ivy.*
 import com.pedropathing.ivy.commands.Commands.instant
 import com.pedropathing.ivy.groups.Groups.parallel
+import com.qualcomm.robotcore.hardware.Gamepad
 import dev.nextftc.robot.opmode.NextOpMode
 import dev.nextftc.robot.opmode.NextTeleop
 import dev.nextftc.robot.triggers.CommandGamepad
@@ -69,8 +70,8 @@ class MainTeleOp(val beaverRobot: BeaverRobot) : NextOpMode(beaverRobot) {
         if (now - lastTelemetryTime > TELEMETRY_INTERVAL) {
             lastTelemetryTime = now
 
-//            telemetry.addData("Robot Pos", beaverRobot.follower.pose())
-//            telemetry.addData("Turret Pos", "(%.1f, %.1f)".format(beaverRobot.turret.turretX, beaverRobot.turret.turretY))
+            telemetry.addData("Robot Pos", beaverRobot.follower.pose())
+            telemetry.addData("Turret Pos", "(%.1f, %.1f)".format(beaverRobot.turret.turretX, beaverRobot.turret.turretY))
 
             telemetry.addData("Shooter RPM", beaverRobot.octoquadReader.getVelocity(OctoquadPorts.Q_SHOOTER.channel))
             telemetry.addData("Tracking Active", beaverRobot.turret.goalTrackingActive)
@@ -111,7 +112,7 @@ class MainTeleOp(val beaverRobot: BeaverRobot) : NextOpMode(beaverRobot) {
         val operator = CommandGamepad(gamepad2)
 
         // Driver Controls
-        beaverRobot.drivetrain.startDrive(gamepad1)
+        beaverRobot.drivetrain.startDrivetrain(gamepad1)
 
         driver.rightBumper.toggleOnTrue(beaverRobot.intake.intake())
 
