@@ -28,5 +28,5 @@ enum class RobotHardware(val deviceName: String) {
 enum class OctoquadPorts(val channel: Int) {
     Q_SHOOTER(3),
     Q_TRANSFER(6),
-    Q_TURRET(7)
+    Q_TURRET(0)
 }
