@@ -6,25 +6,27 @@ enum class RobotHardware(val deviceName: String) {
     M_WHEEL_FL("frontLeft"),
     M_WHEEL_BL("backLeft"),
     M_SHOOTER("shooter"),
-    M_SPINDEXER("spindexer"),
+    M_TRANSFER("transfer"),
     M_INTAKE("intake"),
 
-    S_TURRET1("turret1"),
-    S_TURRET2("turret2"),
-    S_TURRET_HOOD("angle"),
+    S_TURRET("turret"),
+    S_HOOD("hood"),
+    S_GATE("gate"),
+    S_RAMP("ramp"),
 
-    A_TURRET("analog0"),
-    A_SPINDEXER("analogS"),
+    D_BEAM_BREAK_1("beam1"),
+    D_BEAM_BREAK_2("beam2"),
+    D_BEAM_BREAK_3("beam3"),
+    D_BEAM_BREAK_4("beam4"),
 
-    Q_TURRET("frontRight"),
-
-    I2C_PINPOINT("pinpoint"),
-    I2C_LED("i2c2"),
-    I2C_COLOR0("cs0"),
-    I2C_COLOR1("cs1"),
-    I2C_COLOR2("cs2"),
+    I2C_OCTOQUAD("octoquad"),
 
     CAM_TURRET("arducam"),
-    LL("limelight"),
-    DISTANCE_INTAKE_1("distanceIntake1")
+    CAM_LL("limelight")
+}
+
+enum class OctoquadPorts(val channel: Int) {
+    Q_SHOOTER(3),
+    Q_TRANSFER(6),
+    Q_TURRET(0)
 }

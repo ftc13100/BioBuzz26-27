@@ -39,10 +39,10 @@ public class Constants {
                 c.frontRightName.set("frontRight");
                 c.backRightName.set("backRight");
 
-                c.frontLeftDirection.set(DcMotorSimple.Direction.REVERSE);
-                c.backLeftDirection.set(DcMotorSimple.Direction.REVERSE);
-                c.frontRightDirection.set(DcMotorSimple.Direction.FORWARD);
-                c.backRightDirection.set(DcMotorSimple.Direction.FORWARD);
+                c.frontLeftDirection.set(DcMotorSimple.Direction.FORWARD);
+                c.backLeftDirection.set(DcMotorSimple.Direction.FORWARD);
+                c.frontRightDirection.set(DcMotorSimple.Direction.REVERSE);
+                c.backRightDirection.set(DcMotorSimple.Direction.REVERSE);
                 c.manualBrakeMode.set(true);
             }
     );
@@ -51,7 +51,7 @@ public class Constants {
     public static OctoQuadConfig localizerConfig = new OctoQuadConfig(
             c -> {
                 c.name.set("octoquad");
-                c.xPodPort.set(0);
+                c.xPodPort.set(2);
                 c.yPodPort.set(1);
                 c.ticksPerUnit.set(OctoQuadTuner.FOUR_BAR);
                 c.xPodOffset.set(2.187);

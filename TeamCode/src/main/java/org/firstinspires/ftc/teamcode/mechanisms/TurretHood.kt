@@ -7,13 +7,13 @@ import dev.nextftc.robot.Mechanism
 import org.firstinspires.ftc.teamcode.core.RobotHardware
 
 class TurretHood : Mechanism {
-    val servo = NextServo(RobotHardware.S_TURRET_HOOD.deviceName)
+    val servo = NextServo(RobotHardware.S_HOOD.deviceName)
 
     var targetPosition = 0.0
     var manualOffset = 0.0
 
-    val ANGLE_MIN = 0.0
-    val ANGLE_MAX = 0.8
+    val ANGLE_MIN = 0.38
+    val ANGLE_MAX = 1.0
 
     fun update(): Command = instant {
         servo.position = (targetPosition + manualOffset).coerceIn(ANGLE_MIN, ANGLE_MAX)
