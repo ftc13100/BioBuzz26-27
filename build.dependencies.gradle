@@ -1,10 +1,11 @@
 repositories {
     mavenCentral()
     maven { url 'https://repo.dairy.foundation/releases/'}
-    maven { url = 'https://maven.brott.dev/' }
+//    maven { url = 'https://maven.brott.dev/' }
     // UNCOMMENT PANELS UNDER
-    // maven { url = "https://mymaven.bylazar.com/releases" }
-    maven { url = 'https://jitpack.io' }
+     maven { url = "https://mymaven.bylazar.com/releases" }
+    // autotune
+    // maven { url = 'https://jitpack.io' }
     google() // Needed for androidx
 }
 
@@ -21,7 +22,7 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.2.0'
 
     // UNCOMMENT PANELS UNDER
-    // implementation 'com.bylazar:fullpanels:1.0.9'
+     implementation 'com.bylazar:fullpanels:1.0.20'
 
     implementation 'com.pedropathing:revhub:3.0.2'
     implementation 'com.pedropathing:tuning:1.0.3'
@@ -34,8 +35,5 @@ dependencies {
 
     implementation "dev.frozenmilk.sinister:Sloth:0.3.2"
 
-    implementation 'dev.ftcautotune.FtcAutoTune:pidautotuner-core:v1.4.3'
-    implementation 'dev.ftcautotune.FtcAutoTune:pidautotuner-ftc:v1.4.3'
-
-    implementation 'com.acmerobotics.dashboard:dashboard:0.6.0'
+//    implementation 'com.acmerobotics.dashboard:dashboard:0.6.0'
 }

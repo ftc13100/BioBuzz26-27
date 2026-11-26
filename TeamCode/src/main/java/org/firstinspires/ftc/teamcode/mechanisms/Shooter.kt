@@ -1,24 +1,68 @@
 package org.firstinspires.ftc.teamcode.mechanisms
 
+import com.bylazar.configurables.annotations.Configurable
 import com.pedropathing.ivy.Command
 import com.qualcomm.robotcore.util.ElapsedTime
 import dev.nextftc.hardware.actuators.NextMotor
 import dev.nextftc.robot.Mechanism
-import dev.nextftc.units.radiansPerSecond
 import org.firstinspires.ftc.teamcode.core.OctoquadPorts
 import org.firstinspires.ftc.teamcode.core.RobotHardware
+import org.firstinspires.ftc.teamcode.utils.VoltageCompensatingMotor
 import kotlin.math.abs
 
-class Shooter() : Mechanism {
+@Configurable
+class Shooter(val octoquadReader: OctoquadReader = OctoquadReader()) : Mechanism {
     val motor = NextMotor(RobotHardware.M_SHOOTER.deviceName)
+    val compensatedMotor = VoltageCompensatingMotor(motor, nominalVoltage = 13.0)
+    val MAX_SPEED = 6000.0
 
-    @JvmField var targetVelocity = 0.0
-    @JvmField var manualOffset = 0.0
-    val MAX_SPEED = 2200.0
+    companion object {
+        @JvmField var useVoltageComp = false
+        @JvmField var targetVelocity = 0.0
+        @JvmField var manualOffset = 0.0
 
-    @JvmField var kP = 0.001
-    @JvmField var kS = 0.061
-    @JvmField var kV = 0.000385
+        @JvmField var kP = -0.00002
+        @JvmField var kD = 0.000
+        @JvmField var kS = 0.29
+        @JvmField var kV = 0.0007
+        @JvmField var kA = 0.000
+        @JvmField var nominalVoltage = 13.0
+    }
+
+    var useVoltageComp: Boolean
+        get() = Shooter.useVoltageComp
+        set(value) {
+            Shooter.useVoltageComp = value
+            compensatedMotor.enabled = value
+        }
+
+    var targetVelocity: Double
+        get() = Shooter.targetVelocity
+        set(value) { Shooter.targetVelocity = value }
+
+    var manualOffset: Double
+        get() = Shooter.manualOffset
+        set(value) { Shooter.manualOffset = value }
+
+    var kP: Double
+        get() = Shooter.kP
+        set(value) { Shooter.kP = value }
+
+    var kD: Double
+        get() = Shooter.kD
+        set(value) { Shooter.kD = value }
+
+    var kS: Double
+        get() = Shooter.kS
+        set(value) { Shooter.kS = value }
+
+    var kV: Double
+        get() = Shooter.kV
+        set(value) { Shooter.kV = value }
+
+    var kA: Double
+        get() = Shooter.kA
+        set(value) { Shooter.kA = value }
 
     var active = false
     var ready = false
@@ -30,32 +74,36 @@ class Shooter() : Mechanism {
     }
 
     override fun periodic() {
+        compensatedMotor.enabled = Shooter.useVoltageComp
 
         motor.velocityConstants.apply {
-            this.kP = this@Shooter.kP
-            this.kS = this@Shooter.kS
-            this.kV = this@Shooter.kV
+            this.kP = Shooter.kP
+            this.kD = Shooter.kD
+            this.kS = Shooter.kS
+            this.kV = Shooter.kV
+            this.kA = Shooter.kA
         }
 
         if (active) {
-            if (true) { // octoquad.dataValid()
-                val currentVel = motor.encoderVelocity.magnitude
-                val error = targetVelocity - currentVel
+            val currentVel = abs(octoquadReader.getVelocity(OctoquadPorts.Q_SHOOTER.channel))
+            val error = targetVelocity - currentVel
 
-                if (error > 500.0) {
-                    motor.throttle = 1.0
-                } else if (error < -500.0) {
-                    motor.throttle = 0.0
-                } else {
-                    motor.setVelocitySetpoint(targetVelocity.radiansPerSecond)
-                }
+            val pidPower = motor.velocityPID.calculate(
+                reference = targetVelocity,
+                measured = currentVel
+            )
 
-                if (abs(error) < 21.0 && !ready) {
-                    ready = true
-                }
+            val ffPower = motor.velocityFF.calculate(targetVelocity)
+
+            val rawPower = pidPower + ffPower
+
+            compensatedMotor.setPower(rawPower)
+
+            if (abs(error) < 21.0 && !ready) {
+                ready = true
             }
         } else {
-            motor.throttle = 0.0
+            compensatedMotor.setPower(0.0)
             ready = false
         }
     }

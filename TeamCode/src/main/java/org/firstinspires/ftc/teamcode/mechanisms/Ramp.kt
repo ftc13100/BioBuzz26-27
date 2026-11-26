@@ -11,11 +11,11 @@ class Ramp : Mechanism {
     var up = true
 
     fun lift() {
-        servo.position = 0.66
+        servo.position = 1.0
         up = true
     }
     fun deploy() {
-        servo.position = 0.36
+        servo.position = 0.62
         up = false
     }
 
