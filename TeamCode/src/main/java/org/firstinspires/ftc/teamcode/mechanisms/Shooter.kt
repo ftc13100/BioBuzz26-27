@@ -22,8 +22,8 @@ class Shooter(val octoquadReader: OctoquadReader = OctoquadReader()) : Mechanism
 
         @JvmField var kP = -0.00002
         @JvmField var kD = 0.000
-        @JvmField var kS = 0.24
-        @JvmField var kV = 0.00065
+        @JvmField var kS = 0.29
+        @JvmField var kV = 0.0007
         @JvmField var kA = 0.000
         @JvmField var nominalVoltage = 12.0
     }

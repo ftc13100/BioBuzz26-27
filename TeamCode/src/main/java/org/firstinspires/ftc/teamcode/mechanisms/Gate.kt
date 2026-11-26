@@ -7,6 +7,6 @@ import org.firstinspires.ftc.teamcode.core.RobotHardware
 class Gate : Mechanism {
     val servo = NextServo(RobotHardware.S_GATE.deviceName)
 
-    fun open() = instant { servo.position = .1 }
-    fun close() = instant { servo.position = 0.0 }
+    fun open() = instant { servo.position = 0.34 }
+    fun close() = instant { servo.position = 0.46 }
 }

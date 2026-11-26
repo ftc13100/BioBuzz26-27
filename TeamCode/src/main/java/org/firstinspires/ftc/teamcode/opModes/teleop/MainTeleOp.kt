@@ -24,14 +24,16 @@ class MainTeleOp(val beaverRobot: BeaverRobot) : NextOpMode(beaverRobot) {
     private lateinit var logger: BeaverLogger
     private var driveScalar = 1.0
 
-    override fun start() {
+    init {
         beaverRobot.follower.setPose(PoseManager.EndPose)
-        logger = BeaverLogger()
         buildDriverControls()
+        logger = BeaverLogger()
         beaverRobot.turret.stopTracking()
-        beaverRobot.turret.toAngle(180.0)
-        beaverRobot.ramp.lift()
         beaverRobot.gate.close()
+    }
+
+    override fun start() {
+        beaverRobot.turret.toAngle(180.0)
         startSystemTime = System.currentTimeMillis()
     }
 
@@ -117,7 +119,10 @@ class MainTeleOp(val beaverRobot: BeaverRobot) : NextOpMode(beaverRobot) {
         // Driver Controls
         beaverRobot.drivetrain.startDrive(gamepad1)
 
-        driver.rightBumper.toggleOnTrue(beaverRobot.intake.intake())
+        driver.rightBumper.toggleOnTrue(parallel(
+            beaverRobot.intake.intake(),
+            beaverRobot.transfer.intake()
+        ))
 
         driver.leftBumper.toggleOnTrue(beaverRobot.intake.outtake())
 
