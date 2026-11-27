@@ -6,7 +6,6 @@ import com.qualcomm.robotcore.hardware.Servo
 
 @TeleOp(name = "Single Servo Tester")
 class SingleServoTest : LinearOpMode() {
-
     override fun runOpMode() {
         val servoNames = listOf("ramp", "turret", "gate", "hood")
         var selectedIndex = 0
@@ -29,7 +28,6 @@ class SingleServoTest : LinearOpMode() {
             lastUp = up
             lastDown = down
 
-            telemetry.addLine("=== SERVO SELECTOR ===")
             telemetry.addData("Selected", servoNames[selectedIndex])
             telemetry.addLine("")
             telemetry.addLine("DPAD UP/DOWN: Select servo")
@@ -87,6 +85,11 @@ class SingleServoTest : LinearOpMode() {
             telemetry.addData("Servo", servoNames[selectedIndex])
             telemetry.addData("Position", position)
             telemetry.addData("Step", step)
+
+            telemetry.addLine("Controls:")
+            telemetry.addLine("  A/B - Increase/Decrease Position")
+            telemetry.addLine("  RB/LB - Increase/Decrease Step")
+
             telemetry.update()
         }
     }
