@@ -88,18 +88,16 @@ class Shooter(val octoquadReader: OctoquadReader = OctoquadReader()) : Mechanism
             val currentVel = abs(octoquadReader.getVelocity(OctoquadPorts.Q_SHOOTER.channel))
             val error = targetVelocity - currentVel
 
-            val pidPower = motor.velocityPID.calculate(
-                reference = targetVelocity,
-                measured = currentVel
-            )
-
-            val ffPower = motor.velocityFF.calculate(targetVelocity)
-
             val rawPower = if (error > 100) {
                 1.0
             } else if (error < - 100) {
                 0.0
             } else {
+                val pidPower = motor.velocityPID.calculate(
+                    reference = targetVelocity,
+                    measured = currentVel
+                )
+                val ffPower = motor.velocityFF.calculate(targetVelocity)
                 pidPower + ffPower
             }
 
