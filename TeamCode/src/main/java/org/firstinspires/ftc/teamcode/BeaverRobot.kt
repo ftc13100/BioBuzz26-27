@@ -18,7 +18,7 @@ class BeaverRobot : NextRobot {
     val gate by lazy { Gate() }
     val ramp by lazy { Ramp() }
 
-    override val mechanisms by lazy { setOf(drivetrain, hiveManager, intake, transfer, shooter, turret, turretHood, gate, ramp, octoquadReader) }
+    override val mechanisms by lazy { setOf(hiveManager, intake, transfer, shooter, turret, turretHood, gate, ramp, octoquadReader) }
 
     private var _follower: Follower? = null
 

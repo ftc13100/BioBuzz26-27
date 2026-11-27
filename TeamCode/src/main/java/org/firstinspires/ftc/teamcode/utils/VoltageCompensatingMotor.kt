@@ -11,7 +11,7 @@ import kotlin.time.TimeSource.Monotonic.markNow
 class VoltageCompensatingMotor @JvmOverloads constructor(
     val motor: NextMotor,
     private val voltageCacheTime: Duration = 0.25.seconds,
-    private val nominalVoltage: Double = 13.0,
+    private val nominalVoltage: Double = 12.5,
     var enabled: Boolean = false
 ) {
     private val voltageSensor by lazy { RobotController.hardwareMap.voltageSensor.first() }

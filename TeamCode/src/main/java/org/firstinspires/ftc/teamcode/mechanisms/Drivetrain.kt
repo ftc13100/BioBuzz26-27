@@ -1,16 +1,17 @@
 package org.firstinspires.ftc.teamcode.mechanisms
 
 import com.qualcomm.robotcore.hardware.DcMotor
+import com.qualcomm.robotcore.hardware.DcMotorSimple
 import com.qualcomm.robotcore.hardware.Gamepad
 import dev.nextftc.robot.Mechanism
 import dev.nextftc.hardware.RobotController.hardwareMap
 
 class Drivetrain : Mechanism {
     lateinit var gamepad: Gamepad
-    val frontLeft = hardwareMap.get(DcMotor::class.java, "frontLeft")
-    val frontRight = hardwareMap.get(DcMotor::class.java, "frontRight")
-    val backLeft = hardwareMap.get(DcMotor::class.java, "backLeft")
-    val backRight = hardwareMap.get(DcMotor::class.java, "backRight")
+    val frontLeft = hardwareMap.get(DcMotor::class.java, "frontLeft").apply { direction = DcMotorSimple.Direction.FORWARD }
+    val frontRight = hardwareMap.get(DcMotor::class.java, "frontRight").apply { direction = DcMotorSimple.Direction.REVERSE }
+    val backLeft = hardwareMap.get(DcMotor::class.java, "backLeft").apply { direction = DcMotorSimple.Direction.FORWARD }
+    val backRight = hardwareMap.get(DcMotor::class.java, "backRight").apply { direction = DcMotorSimple.Direction.REVERSE }
 
     fun startDrivetrain(gamepad: Gamepad) {
         this.gamepad = gamepad

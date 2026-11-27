@@ -68,6 +68,12 @@ class MainTeleOp(val beaverRobot: BeaverRobot) : NextOpMode(beaverRobot) {
             BiLinearShooter.applyShot(shot, beaverRobot)
         }
 
+        beaverRobot.follower.manual(
+            -gamepad1.left_stick_y.toDouble() * driveScalar,
+            -gamepad1.left_stick_x.toDouble() * driveScalar,
+            -gamepad1.right_stick_x.toDouble() * driveScalar
+        )
+
         beaverRobot.updateFollower()
         if (now - lastTelemetryTime > TELEMETRY_INTERVAL) {
             lastTelemetryTime = now
@@ -114,7 +120,6 @@ class MainTeleOp(val beaverRobot: BeaverRobot) : NextOpMode(beaverRobot) {
         val operator = CommandGamepad(gamepad2)
 
         // Driver Controls
-        beaverRobot.drivetrain.startDrivetrain(gamepad1)
 
         driver.rightBumper.toggleOnTrue(parallel(
             beaverRobot.intake.intake(),

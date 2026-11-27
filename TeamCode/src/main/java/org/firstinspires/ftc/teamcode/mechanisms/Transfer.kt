@@ -25,17 +25,17 @@ class Transfer : Mechanism {
     }
 
     fun intake(): Command = Command.build()
-        .setStart { motor.throttle = 0.5 }
+        .setStart { motor.throttle = 0.8 }
         .setEnd { _ -> motor.throttle = 0.0 }
         .requiring(this)
 
     fun outtake(): Command = Command.build()
-        .setStart { motor.throttle = -1.0 }
+        .setStart { motor.throttle = -0.8 }
         .setEnd { _ -> motor.throttle = 0.0 }
         .requiring(this)
 
     fun shoot(): Command = Command.build()
-        .setStart { motor.throttle = 1.0 }
+        .setStart { motor.throttle = 0.8 }
         .setEnd { _ -> motor.throttle = 0.0 }
         .requiring(this)
 
