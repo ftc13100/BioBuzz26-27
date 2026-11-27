@@ -10,12 +10,11 @@ import kotlin.math.abs
 
 class Transfer : Mechanism {
     val motor = NextMotor(RobotHardware.M_TRANSFER.deviceName)
-//    val beambreaks = arrayOf(
-//        hardwareMap.get(DigitalChannel::class.java, RobotHardware.D_BEAM_BREAK_1.deviceName),
-//        hardwareMap.get(DigitalChannel::class.java, RobotHardware.D_BEAM_BREAK_2.deviceName),
-//        hardwareMap.get(DigitalChannel::class.java, RobotHardware.D_BEAM_BREAK_3.deviceName),
-//        hardwareMap.get(DigitalChannel::class.java, RobotHardware.D_BEAM_BREAK_4.deviceName)
-//    )
+    val beambreaks = arrayOf(
+        hardwareMap.get(DigitalChannel::class.java, RobotHardware.D_BEAM_BREAK_1.deviceName),
+        hardwareMap.get(DigitalChannel::class.java, RobotHardware.D_BEAM_BREAK_2.deviceName),
+        hardwareMap.get(DigitalChannel::class.java, RobotHardware.D_BEAM_BREAK_3.deviceName)
+    )
 
     val isRunning: Boolean
         get() = abs(motor.throttle) > 0.1
@@ -24,7 +23,7 @@ class Transfer : Mechanism {
         motor.direction = NextMotor.Direction.REVERSE
     }
 
-    fun intake(): Command = Command.build()
+    fun runSlow(): Command = Command.build()
         .setStart { motor.throttle = 0.5 }
         .setEnd { _ -> motor.throttle = 0.0 }
         .requiring(this)
@@ -41,9 +40,9 @@ class Transfer : Mechanism {
 
     fun stop(): Command = instant { motor.throttle = 0.0 }
 
-//    fun getBallCount(): Int {
-//        var count = 0
-//        for (beambreak in beambreaks) if (beambreak.state) count++
-//        return count
-//    }
+    fun getBallCount(): Int {
+        var count = 0
+        for (beambreak in beambreaks) if (beambreak.state) count++
+        return count
+    }
 }

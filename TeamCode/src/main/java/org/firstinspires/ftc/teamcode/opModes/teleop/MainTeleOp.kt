@@ -118,7 +118,7 @@ class MainTeleOp(val beaverRobot: BeaverRobot) : NextOpMode(beaverRobot) {
 
         driver.rightBumper.toggleOnTrue(parallel(
             beaverRobot.intake.intake(),
-            beaverRobot.transfer.intake()
+//            beaverRobot.transfer.runSlow()
         ))
 
         driver.leftBumper.toggleOnTrue(beaverRobot.intake.outtake())
