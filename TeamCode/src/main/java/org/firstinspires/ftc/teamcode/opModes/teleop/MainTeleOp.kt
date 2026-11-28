@@ -97,9 +97,9 @@ class MainTeleOp(val beaverRobot: BeaverRobot) : NextOpMode(beaverRobot) {
 
             logger.log(
                 "time" to System.currentTimeMillis() - startSystemTime,
-                "posX" to beaverRobot.follower.pose().x(),
-                "posY" to beaverRobot.follower.pose().y(),
-                "heading" to beaverRobot.follower.pose().heading(),
+//                "posX" to beaverRobot.follower.pose().x(),
+//                "posY" to beaverRobot.follower.pose().y(),
+//                "heading" to beaverRobot.follower.pose().heading(),
                 "shooterTarget" to beaverRobot.shooter.targetVelocity,
                 "shooterActual" to beaverRobot.shooter.motor.encoderVelocity.magnitude,
                 "shooterThrottle" to beaverRobot.shooter.motor.throttle
@@ -118,8 +118,6 @@ class MainTeleOp(val beaverRobot: BeaverRobot) : NextOpMode(beaverRobot) {
     fun buildDriverControls() {
         val driver = CommandGamepad(gamepad1)
         val operator = CommandGamepad(gamepad2)
-
-        // Driver Controls
 
         driver.rightBumper.toggleOnTrue(parallel(
             beaverRobot.intake.intake(),

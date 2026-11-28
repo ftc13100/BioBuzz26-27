@@ -26,10 +26,9 @@ class TurretHood : Mechanism {
 
     fun angleUp() = toPos(ANGLE_MAX)
     fun angleDown() = toPos(ANGLE_MIN)
-    fun angleMid() = toPos(0.65)
-    fun angleVeryMid() = toPos(0.58)
 
-    fun adjustAngle(adj: Double) {
+
+    fun adjustAngle(adj: Double) : Command = instant {
         targetPosition = (targetPosition + adj).coerceIn(ANGLE_MIN, ANGLE_MAX)
         servo.position = (targetPosition + manualOffset).coerceIn(ANGLE_MIN, ANGLE_MAX)
     }

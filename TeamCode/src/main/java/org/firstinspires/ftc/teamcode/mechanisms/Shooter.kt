@@ -13,7 +13,7 @@ import kotlin.math.abs
 @Configurable
 class Shooter(val octoquadReader: OctoquadReader = OctoquadReader()) : Mechanism {
     val motor = NextMotor(RobotHardware.M_SHOOTER.deviceName)
-    val compensatedMotor = VoltageCompensatingMotor(motor, nominalVoltage = 12.5)
+    val compensatedMotor = VoltageCompensatingMotor(motor, nominalVoltage = 13.0)
     val MAX_SPEED = 2000.0
 
     companion object {
@@ -21,12 +21,14 @@ class Shooter(val octoquadReader: OctoquadReader = OctoquadReader()) : Mechanism
         @JvmField var targetVelocity = 0.0
         @JvmField var manualOffset = 0.0
 
-        @JvmField var kP = 0.0026
+        @JvmField var bbThreshold = 80
+
+        @JvmField var kP = 0.0011
         @JvmField var kD = 0.000
-        @JvmField var kS = 0.155
-        @JvmField var kV = 0.000485
+        @JvmField var kS = 0.14
+        @JvmField var kV = 0.00056
         @JvmField var kA = 0.000
-        @JvmField var nominalVoltage = 12.5
+        @JvmField var nominalVoltage = 13.0
     }
 
     var useVoltageComp: Boolean
@@ -88,9 +90,9 @@ class Shooter(val octoquadReader: OctoquadReader = OctoquadReader()) : Mechanism
             val currentVel = abs(octoquadReader.getVelocity(OctoquadPorts.Q_SHOOTER.channel))
             val error = targetVelocity - currentVel
 
-            val rawPower = if (error > 100) {
+            val rawPower = if (error > bbThreshold) {
                 1.0
-            } else if (error < - 100) {
+            } else if (error < (-bbThreshold)) {
                 0.0
             } else {
                 val pidPower = motor.velocityPID.calculate(

@@ -35,8 +35,12 @@ class ShooterTuner(val beaverRobot: BeaverRobot) : NextOpMode(beaverRobot) {
 
         driver.a.onTrue(beaverRobot.shooter.spinAtSpeed(targetVel))
         driver.b.onTrue(beaverRobot.shooter.stop())
+
         driver.dpadUp.onTrue(beaverRobot.gate.close())
         driver.dpadDown.onTrue(beaverRobot.gate.open())
+
+        driver.dpadLeft.onTrue(beaverRobot.turretHood.adjustAngle(.05))
+        driver.dpadRight.onTrue(beaverRobot.turretHood.adjustAngle(-.05))
 
         driver.y.onTrue(instant { Shooter.useVoltageComp = !Shooter.useVoltageComp })
 
@@ -68,15 +72,15 @@ class ShooterTuner(val beaverRobot: BeaverRobot) : NextOpMode(beaverRobot) {
             Shooter.targetVelocity = targetVel
         }
 
-        val currentVelocity = abs(beaverRobot.octoquadReader.getVelocity(OctoquadPorts.Q_SHOOTER.channel).toDouble())
+        val currentVelocity = abs(beaverRobot.octoquadReader.getVelocity(OctoquadPorts.Q_SHOOTER.channel))
         val power = beaverRobot.shooter.motor.throttle
         val error = targetVel - currentVelocity
 
-        telemetry.addData("Voltage Comp Enabled", Shooter.useVoltageComp)
-        telemetry.addData("Loop Time", "%.2f ms".format(loopTime))
-        telemetry.addData("Min Loop Time", "%.2f ms".format(minLoopTime))
-        telemetry.addData("Max Loop Time", "%.2f ms".format(maxLoopTime))
-        telemetry.update()
+//        telemetry.addData("Voltage Comp Enabled", Shooter.useVoltageComp)
+//        telemetry.addData("Loop Time", "%.2f ms".format(loopTime))
+//        telemetry.addData("Min Loop Time", "%.2f ms".format(minLoopTime))
+//        telemetry.addData("Max Loop Time", "%.2f ms".format(maxLoopTime))
+//        telemetry.update()
 
         panelsTelemetry.addData("targetVelocity", targetVel)
         panelsTelemetry.addData("currentVelocity", currentVelocity)

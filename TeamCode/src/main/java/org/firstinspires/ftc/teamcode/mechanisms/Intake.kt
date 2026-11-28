@@ -17,12 +17,12 @@ class Intake : Mechanism {
     }
 
     fun intake(): Command = Command.build()
-        .setStart { motor.throttle = 1.0 }
+        .setStart { motor.throttle = 0.9 }
         .setEnd { _ -> motor.throttle = 0.0 }
         .requiring(this)
 
     fun outtake(): Command = Command.build()
-        .setStart { motor.throttle = -1.0 }
+        .setStart { motor.throttle = -0.5 }
         .setEnd { _ -> motor.throttle = 0.0 }
         .requiring(this)
 
